@@ -24,8 +24,13 @@ type Check struct {
 // Report is the whole `cotty doctor` result.
 type Report struct {
 	Checks    []Check  `json:"checks"`
-	Assurance string   `json:"assurance"`
+	Assurance string   `json:"assurance"` // layer 2 alone: what `cotty agent` reports
 	Gaps      []string `json:"gaps"`
+	// Sessions is the level a session created now can reach, with the
+	// guard (layer 3) and the binary check counted; SessionsNote explains
+	// it. Both are filled by the command, not by Doctor.
+	Sessions     string `json:"sessions,omitempty"`
+	SessionsNote string `json:"sessions_note,omitempty"`
 }
 
 // Assess turns what the launcher can use into an assurance level for

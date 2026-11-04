@@ -407,6 +407,14 @@ included):
 as `COTTY_ASSURANCE`. The broker's own assurance levels (`strong`,
 `confined`, `weak`, `insecure`, PLAN section 3) build on this.
 
+`cotty doctor` then names the level a session created now can reach:
+`strong available for new sessions (cotty-guard running)`, `confined
+(cotty-guard not running)`, `weak` when the cotty binary can be replaced
+by your user, or `unavailable`. A session keeps the level it got when it
+started: one created before cotty-guard started stays `confined`, so start
+a new session after starting the guard. In `--json` these are the
+`sessions` and `sessions_note` fields.
+
 Ubuntu 24.04 and later allow unprivileged user namespaces only to programs
 with an AppArmor profile (`kernel.apparmor_restrict_unprivileged_userns =
 1`). cotty ships two in `dist/apparmor/cotty`, after Ubuntu's
