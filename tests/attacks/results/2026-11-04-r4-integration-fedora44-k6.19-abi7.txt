@@ -1,0 +1,57 @@
+vm-broker: cotty-r4i-fedora44 is up (ssh port 2361)
+=== RUN   TestPrivateModeLastCommand
+--- PASS: TestPrivateModeLastCommand (1.79s)
+=== RUN   TestSecretPromptEvents
+--- PASS: TestSecretPromptEvents (2.93s)
+=== RUN   TestAttachRefusesFakeListener
+--- PASS: TestAttachRefusesFakeListener (1.80s)
+=== RUN   TestFakeLockPipeline
+--- PASS: TestFakeLockPipeline (5.28s)
+=== RUN   TestTypeaheadNotEchoed
+--- PASS: TestTypeaheadNotEchoed (0.97s)
+=== RUN   TestSecretPrompts
+=== RUN   TestSecretPrompts/sudo
+=== RUN   TestSecretPrompts/read_-s
+=== RUN   TestSecretPrompts/python_getpass
+=== RUN   TestSecretPrompts/openssl_passwd
+=== RUN   TestSecretPrompts/su
+=== RUN   TestSecretPrompts/passwd
+=== RUN   TestSecretPrompts/ssh
+--- PASS: TestSecretPrompts (9.86s)
+    --- PASS: TestSecretPrompts/sudo (0.49s)
+    --- PASS: TestSecretPrompts/read_-s (0.35s)
+    --- PASS: TestSecretPrompts/python_getpass (0.41s)
+    --- PASS: TestSecretPrompts/openssl_passwd (1.10s)
+    --- PASS: TestSecretPrompts/su (3.49s)
+    --- PASS: TestSecretPrompts/passwd (2.43s)
+    --- PASS: TestSecretPrompts/ssh (0.70s)
+=== RUN   TestZshReadSecret
+--- PASS: TestZshReadSecret (1.31s)
+=== RUN   TestRawModeNeverSecret
+=== RUN   TestRawModeNeverSecret/bash
+=== RUN   TestRawModeNeverSecret/zsh
+--- PASS: TestRawModeNeverSecret (15.36s)
+    --- PASS: TestRawModeNeverSecret/bash (11.90s)
+    --- PASS: TestRawModeNeverSecret/zsh (3.46s)
+=== RUN   TestSudoPwfeedbackDetected
+--- PASS: TestSudoPwfeedbackDetected (2.94s)
+=== RUN   TestPassthrough
+--- PASS: TestPassthrough (1.84s)
+=== RUN   TestArbitration
+--- PASS: TestArbitration (4.19s)
+=== RUN   TestConfirmPolicy
+--- PASS: TestConfirmPolicy (3.50s)
+=== RUN   TestPersonAdmission
+--- PASS: TestPersonAdmission (2.98s)
+=== RUN   TestNotShared
+--- PASS: TestNotShared (0.78s)
+=== RUN   TestLeakCheckWorks
+--- PASS: TestLeakCheckWorks (0.90s)
+=== RUN   TestSudoCommandsNotSecret
+--- PASS: TestSudoCommandsNotSecret (18.55s)
+=== RUN   TestSudoWrongPasswordRetry
+--- PASS: TestSudoWrongPasswordRetry (5.23s)
+=== RUN   TestSudoFromScriptDetected
+--- PASS: TestSudoFromScriptDetected (10.41s)
+PASS
+rc=0

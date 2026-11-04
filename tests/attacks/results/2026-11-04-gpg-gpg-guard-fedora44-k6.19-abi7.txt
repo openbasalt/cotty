@@ -1,0 +1,23 @@
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+
+gpg prompts, guard loaded, 6.19.10-300.fc44.x86_64, Fedora Linux 44 (Cloud Edition)
+RES   CHECK                            DETAIL
+PASS  gpg-loopback-lock                lock lit for git commit -S: LOCK timeout | git | gpg (started by agent)
+PASS  gpg-loopback-agent-frozen        agent view frozen during the prompt: 1 state event(s) while the secret prompt was active, 4 in total 
+PASS  gpg-loopback-commit-signed       git commit -S signed with the passphrase the person typed (verify-commit ok)
+PASS  gpg-loopback-clearsign           gpg --clearsign: lock (LOCK timeout | bash (as sh) > (not a system program) (started by agent)), signed
+PASS  gpg-loopback-agent-reads-pass    denied: marker absent from screen, scrollback and state (2022 bytes read) 
+PASS  gpg-pinentry-no-exception        refused without an exception (commit exit 128: error: gpg failed to sign the data: [GNUPG:] KEY_CONSIDERED 9CEE385B9EAA51664CDE)
+PASS  gpg-exception-loaded             the guard lists /usr/bin/pinentry-curses
+PASS  gpg-pinentry-exception-lock      lock: LOCK pinentry-curses (exception)
+PASS  gpg-pinentry-agent-frozen        agent view frozen during the prompt: 1 state event(s) while the secret prompt was active, 4 in total 
+PASS  gpg-pinentry-commit-signed       git commit -S signed through pinentry-curses
+PASS  gpg-pinentry-agent-reads-pass    denied: marker absent from screen, scrollback and state (2619 bytes read) 
+PASS  gpg-exception-logged             the guard logged the exception use
+PASS  gpg-exception-audited            guard.exception in the guard's audit log
+PASS  gpg-secret-start-audited         the session audit log has the exception prompt
+PASS  gpg-pass-in-logs                 the passphrase is in no audit or broker log
+
+summary: 15 pass, 0 fail, 0 gap (documented), 0 skip (work dir /home/lab/cotty-gpg/20261104-195730)

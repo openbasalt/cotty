@@ -1,0 +1,31 @@
+session gl14617: broker 7062, shell 7072, pts /dev/pts/1; agent 7080 tagged agent:7046
+PASS  start-strong                       the session reports strong
+PASS  start-pts-by-path                  denied: open /dev/pts/1: operation not permitted 
+PASS  start-pts-via-proc-fd              denied: open /proc/7072/fd/0: operation not permitted 
+PASS  start-agent-tagged                 the agent is tagged (agent:7046)
+PASS  start-steal-protection             denied: refused: broken pipe 
+PASS  start-protect-not-broker           denied: refused: only a registered cotty broker may protect a terminal 
+idle for 660 s
+PASS  idle-pts-by-path                   denied: open /dev/pts/1: operation not permitted 
+PASS  idle-pts-via-proc-fd               denied: open /proc/7072/fd/0: operation not permitted 
+PASS  idle-strong                        after 660 s idle the session still reports strong
+PASS  restart-pts-by-path                denied: open /dev/pts/1: operation not permitted 
+PASS  restart-pts-via-proc-fd            denied: open /proc/7072/fd/0: operation not permitted 
+PASS  restart-agent-tag-kept             the agent's tag survived the restart (agent:7046)
+PASS  restart-strong                     strong again once the restarted guard confirms the protection
+PASS  stopped-pts-by-path                denied: open /dev/pts/1: operation not permitted 
+PASS  stopped-pts-via-proc-fd            denied: open /proc/7072/fd/0: operation not permitted 
+PASS  stopped-not-strong                 not strong while the guard does not answer
+PASS  started-strong                     strong again after the start
+cotty-guard: programs detached, maps removed
+PASS  uninstall-not-strong               after the protection lapsed the session stays below strong
+PASS  reprotected-pts-by-path            denied: open /dev/pts/1: operation not permitted 
+PASS  reprotected-pts-via-proc-fd        denied: open /proc/7072/fd/0: operation not permitted 
+PASS  uninstall-still-not-strong         still below strong after the session protected its pts again
+PASS  broker-gone-released               the session's protection is gone once its broker exited (back to 1, within the 30 s sweep)
+PASS  upgrade-map-migrated               allowed_socks of an older size migrated (entries 26 -> 12, size 16384)
+PASS  upgrade-incompatible-refused       a pinned map with another value layout refuses the start
+PASS  upgrade-incompatible-keeps-enforcing the old programs stay attached (pinned links kept)
+
+guard lifetime matrix, 7.0.0-38-generic, Ubuntu 26.04.1 LTS, idle 660 s
+summary: 25 pass, 0 fail, 0 skip

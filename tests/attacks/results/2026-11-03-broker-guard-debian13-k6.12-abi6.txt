@@ -1,0 +1,61 @@
+cotty agent: profile generic, project /home/lab/cotty-bmatrix/20261103-223954/project, assurance confined (landlock ABI 6, cgroup cotty-agent-00bb1e83defe.scope)
+
+broker escape matrix, guard loaded, 6.12.115+deb13.1-cloud-amd64, Debian GNU/Linux 13 (trixie), landlock ABI 6
+u- rows: unconfined process of the same user (agent assurance weak); c- rows: under cotty agent (assurance confined)
+RES   CHECK                          DETAIL
+PASS  secret-prompt-seen             the person typed the secret at the lock
+PASS  secret-start-audited           the audit log has the secret prompt (start), never its content
+PASS  session-core-limit             session children have RLIMIT_CORE 0 (hard): core=0 hist=/home/lab/.local/state/cotty/sessions/bm3028/history
+PASS  session-histfile               HISTFILE is in the session state dir
+PASS  u-hello-person-main            denied: hello person refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binary
+PASS  u-hello-control-main           denied: hello control refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binar
+PASS  u-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  u-control-no-tty               denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-kill-no-tty                  denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-attach-fresh-pty             denied: cotty: approval_denied: the attached person did not approve 
+PASS  u-attach-needed-approval       the attach waited for the person, who denied it (0 -> 1 denials)
+PASS  u-systemd-run-pty-attach       denied: Failed to connect to user scope bus via local transport: No such file or directory 
+FAIL  u-systemd-run-needed-approval  not true: systemd-run --user --pty attach waited for the person (1 -> 1 denials)
+PASS  u-systemd-run-control          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  u-still-shared                 the session is still shared after the control attempts
+PASS  u-agent-reads-secret           denied: marker absent from screen, scrollback and state (1505 bytes read) 
+PASS  u-pts-by-path                  denied: open /dev/pts/2: operation not permitted 
+PASS  u-pts-via-proc-fd              denied: open /proc/33303/fd/0: operation not permitted 
+PASS  u-broker-fds                   denied: ls: cannot open directory '/proc/33293/fd': Permission denied 
+PASS  u-broker-environ               denied: open /proc/33293/environ: open /proc/33293/environ: permission denied 
+PASS  u-ptrace-broker                denied: ptrace attach 33293: operation not permitted 
+PASS  u-proc-mem-broker              denied: open /proc/33293/mem: open /proc/33293/mem: permission denied 
+PASS  u-vm-readv-broker              denied: process_vm_readv 33293: operation not permitted 
+PASS  u-ptrace-attach-client         denied: ptrace attach 33347: operation not permitted 
+PASS  u-proc-mem-attach-client       denied: open /proc/33347/mem: open /proc/33347/mem: permission denied 
+PASS  u-vm-readv-attach-client       denied: process_vm_readv 33347: operation not permitted 
+PASS  u-secret-in-audit-or-logs      denied:  
+PASS  u-hello-agent-require-confined denied: hello agent refused: confinement_required: this session accepts only confined agents (--require-confined); start the agent with `cotty agent`: agent n
+PASS  c-agent-endpoint               ok hello agent granted: assurance strong () 
+PASS  c-agent-endpoint-require       ok hello agent granted: assurance strong () 
+PASS  c-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-hello-control-agentsock      denied: hello control refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-agent-dir-plant-socket       denied: open for writing /run/user/1000/cotty/agent/fake.sock: open /run/user/1000/cotty/agent/fake.sock: read-only file system 
+PASS  c-agent-reads-secret           denied: marker absent from screen, scrollback and state (1509 bytes read) 
+PASS  c-main-socket-visible          denied:  
+PASS  c-hello-person-main            denied: connect /run/user/1000/cotty/bm3028.sock: dial unix /run/user/1000/cotty/bm3028.sock: connect: no such file or directory 
+PASS  c-session-dir-listing          denied: ls: cannot access '/run/user/1000/cotty/bm3028.json': No such file or directory 
+PASS  c-attach-fresh-pty             denied: cotty: no session "bm3028" 
+PASS  c-systemd-run-attach           denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  c-reattach-code-brute          denied: no code prompt (0 guesses typed): cotty: no session "bm3028" 
+PASS  c-pts-by-path                  denied: open /dev/pts/2: no such file or directory 
+PASS  c-pts-via-proc-fd              denied: open /proc/33303/fd/0: no such file or directory 
+PASS  c-ptrace-broker                denied: ptrace attach 33293: operation not permitted 
+PASS  c-proc-mem-broker              denied: open /proc/33293/mem: open /proc/33293/mem: no such file or directory 
+PASS  c-vm-readv-broker              denied: process_vm_readv 33293: operation not permitted 
+PASS  c-ptrace-attach-client         denied: ptrace attach 33347: operation not permitted 
+PASS  c-proc-mem-attach-client       denied: open /proc/33347/mem: open /proc/33347/mem: no such file or directory 
+PASS  c-read-audit                   denied: open /home/lab/.local/state/cotty/audit.jsonl: open /home/lab/.local/state/cotty/audit.jsonl: no such file or directory 
+PASS  c-read-broker-log              denied: open /run/user/1000/cotty/bm3028.log: open /run/user/1000/cotty/bm3028.log: no such file or directory 
+PASS  c-read-history                 denied: open /home/lab/.local/state/cotty/sessions/bm3028/history: open /home/lab/.local/state/cotty/sessions/bm3028/history: no such file or direct
+PASS  c-inside-completed             broker-inside.sh ran to the end (cotty agent exit 0)
+PASS  person-detached                the person detached and noted the new code
+PASS  u-reattach-code-brute          denied: 5 guesses in 0.3s, 4 answered wrong code, rate limit reached 1 times; code space 32^10 (2^50), 3 guesses per 30 s 
+PASS  person-reattach                the person reattaches with the real code after the guesses
+
+summary: 53 pass, 1 fail, 0 gap (documented, guard needed), 0 skip (work dir /home/lab/cotty-bmatrix/20261103-223954)

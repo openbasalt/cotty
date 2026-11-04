@@ -1,0 +1,95 @@
+cotty agent: gap: Landlock ABI below 9: pathname Unix sockets are kept out only by the mount view (/run, /tmp, $XDG_RUNTIME_DIR and known socket directories under /var, /nix and /opt are hidden); a socket in a directory that stays visible (the project, a --ro or --rw path, a system directory cotty does not know about) can be connected to
+cotty agent: gap: the agent shares your network namespace: it can reach any TCP or UDP service you can, including services listening on localhost (databases, dev servers, a browser's debugging port)
+cotty agent: profile generic, project /home/lab/cotty-bmatrix/20261104-193142/project, assurance confined (landlock ABI 8, cgroup cotty-agent-080d8f1df245.scope)
+/home/lab/cotty/tests/attacks/broker.sh: line 598: /home/lab/cotty-bmatrix/20261104-193142/forged-attach-approval.out: No such file or directory
+/home/lab/cotty/tests/attacks/broker.sh: line 598: /home/lab/cotty-bmatrix/20261104-193142/forged-attach-insecure.out: No such file or directory
+
+broker escape matrix, guard loaded, 7.0.0-38-generic, Ubuntu 26.04.1 LTS, landlock ABI 8
+u- rows: unconfined process of the same user (agent assurance weak); c- rows: under cotty agent (assurance confined)
+RES   CHECK                          DETAIL
+PASS  secret-prompt-seen             the person typed the secret at the lock
+PASS  secret-start-audited           the audit log has the secret prompt (start), never its content
+PASS  session-core-limit             session children have RLIMIT_CORE 0 (hard): core=0 hist=/home/lab/.local/state/cotty/sessions/bm30625/history
+PASS  session-histfile               HISTFILE is in the session state dir
+PASS  u-hello-person-main            denied: hello person refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binary
+PASS  u-hello-control-main           denied: hello control refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binar
+PASS  u-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  u-control-no-tty               denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-kill-no-tty                  denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-attach-fresh-pty             denied: Reattach code (shown at detach, or with ^] c in an attached client): 
+PASS  u-attach-needs-code            an attach without the code raised no attach request (0 -> 0 requests)
+PASS  u-systemd-run-pty-attach       denied: Reattach code (shown at detach, or with ^] c in an attached client): 
+PASS  u-systemd-run-needs-code       systemd-run --user --pty attach raised no attach request without the code (0 -> 0)
+PASS  u-systemd-run-control          denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-still-shared                 the session is still shared after the control attempts
+PASS  u-agent-reads-secret           denied: marker absent from screen, scrollback and state (1460 bytes read) 
+PASS  u-pts-by-path                  denied: open /dev/pts/2: operation not permitted 
+PASS  u-pts-via-proc-fd              denied: open /proc/10044/fd/0: operation not permitted 
+PASS  u-ptrace-shell                 denied: ptrace attach 10044: operation not permitted 
+PASS  u-pts-scm-rights               denied: the descriptor was refused (MSG_CTRUNC, no SCM_RIGHTS) 
+PASS  u-tagged-dev-tty               denied: guardprobe: agent registered as agent:7222 (cgroup /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-t
+PASS  u-broker-fds                   denied: ls: cannot open directory '/proc/10034/fd': Permission denied 
+PASS  u-broker-environ               denied: open /proc/10034/environ: open /proc/10034/environ: permission denied 
+PASS  u-ptrace-broker                denied: ptrace attach 10034: operation not permitted 
+PASS  u-proc-mem-broker              denied: open /proc/10034/mem: open /proc/10034/mem: permission denied 
+PASS  u-vm-readv-broker              denied: process_vm_readv 10034: operation not permitted 
+PASS  u-ptrace-attach-client         denied: ptrace attach 10087: operation not permitted 
+PASS  u-proc-mem-attach-client       denied: open /proc/10087/mem: open /proc/10087/mem: permission denied 
+PASS  u-vm-readv-attach-client       denied: process_vm_readv 10087: operation not permitted 
+PASS  u-secret-in-audit-or-logs      searched 23 files (152 KiB of state), the secret is in none
+PASS  u-pts-pidfd-getfd              denied: pidfd_getfd on 10044: operation not permitted 
+PASS  u-hello-agent-require-confined denied: hello agent refused: confinement_required: this session accepts only confined agents (--require-confined); start the agent with `cotty agent`: agent n
+PASS  c-agent-endpoint               ok hello agent granted: assurance strong () 
+PASS  c-agent-endpoint-require       ok hello agent granted: assurance strong () 
+PASS  c-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-hello-control-agentsock      denied: hello control refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-agent-dir-plant-socket       denied: open for writing /run/user/1000/cotty/agent/fake.sock: open /run/user/1000/cotty/agent/fake.sock: read-only file system 
+PASS  c-agent-reads-secret           denied: marker absent from screen, scrollback and state (1936 bytes read) 
+PASS  c-main-socket-visible          denied: /run/user/1000/cotty/bm30625.sock is not in the view 
+PASS  c-hello-person-main            denied: connect /run/user/1000/cotty/bm30625.sock: dial unix /run/user/1000/cotty/bm30625.sock: connect: no such file or directory 
+PASS  c-session-dir-listing          denied: ls: cannot access '/run/user/1000/cotty/bm30625.json': No such file or directory 
+PASS  c-attach-fresh-pty             denied: cotty: no session "bm30625" 
+PASS  c-systemd-run-attach           denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  c-admission-not-visible        denied: no code prompt (0 guesses typed): cotty: no session "bm30625" 
+PASS  c-pts-by-path                  denied: open /dev/pts/2: no such file or directory 
+PASS  c-pts-via-proc-fd              denied: open /proc/10044/fd/0: no such file or directory 
+PASS  c-ptrace-broker                denied: ptrace attach 10034: operation not permitted 
+PASS  c-proc-mem-broker              denied: open /proc/10034/mem: open /proc/10034/mem: no such file or directory 
+PASS  c-vm-readv-broker              denied: process_vm_readv 10034: operation not permitted 
+PASS  c-ptrace-attach-client         denied: ptrace attach 10087: operation not permitted 
+PASS  c-proc-mem-attach-client       denied: open /proc/10087/mem: open /proc/10087/mem: no such file or directory 
+PASS  c-pts-pidfd-getfd              denied: pidfd_open 10044: no such process 
+PASS  c-read-audit                   denied: open /home/lab/.local/state/cotty/audit.jsonl: open /home/lab/.local/state/cotty/audit.jsonl: no such file or directory 
+PASS  c-read-broker-log              denied: open /run/user/1000/cotty/bm30625.log: open /run/user/1000/cotty/bm30625.log: no such file or directory 
+PASS  c-read-history                 denied: open /home/lab/.local/state/cotty/sessions/bm30625/history: open /home/lab/.local/state/cotty/sessions/bm30625/history: no such file or dire
+PASS  c-inside-completed             broker-inside.sh ran to the end (cotty agent exit 0)
+PASS  u-private-mode-last-command    denied: marker absent from screen, scrollback and state (1974 bytes read) 
+PASS  u-state-events-during-secret   denied: 1 state event(s) while the secret prompt was active, 3 in total 
+PASS  u-fake-lock-pipeline           the lock names the reader: LOCK sleep | python3.14 (as > (not a system program) (started by agent)
+PASS  u-fake-lock-renamed            the lock names the executable: LOCK sed (as sudo) (started by agent)
+PASS  u-private-moved-rows           denied: marker absent from screen, scrollback and state (1390 bytes read) 
+PASS  u-private-no-text-oracle       the agent reads its own row equal to a private one
+PASS  u-private-then-secret-freeze   denied: marker absent from screen, scrollback and state (1456 bytes read) 
+PASS  u-private-then-private-freeze  denied: marker absent from screen, scrollback and state (1457 bytes read) 
+PASS  u-forged-osc133-private-row    denied: marker absent from screen, scrollback and state (1463 bytes read) 
+PASS  u-typeahead-agent-enter        denied: marker absent from screen, scrollback and state (1651 bytes read) 
+PASS  u-sudo-command-not-secret      no lock while sudo ran its command (sudo-rs 0.2.13-0ubuntu1.2)
+PASS  u-pts-after-guard-restart      denied: open /dev/pts/2: operation not permitted 
+PASS  u-strong-after-guard-restart   cotty agent: gap: Landlock ABI below 9: pathname Unix sockets are kept out only by the mount view (/run, /tmp, $XDG_RUNTIME_DIR and known socket directories under /var, /nix and /opt are hidden); a socket in a directory that stays visible (the project, a --ro or --rw path, a system directory cotty does not know about) can be connected to
+cotty agent: gap: the agent shares your network namespace: it can reach any TCP or UDP service you can, including services listening on localhost (databases, dev servers, a browser's debugging port)
+hello agent granted: assurance strong ()
+PASS  person-detached                the person detached and noted the new code
+PASS  u-reattach-code-brute          denied: 4 guesses in 1.7s, 4 answered wrong code, rate limit reached 1 times; code space 32^10 (2^50), 3 guesses per 30 s 
+PASS  person-not-locked-out          the person attached right after the guesses
+PASS  person-reattach                the person reattaches with the real code after the guesses
+PASS  u-session-socket-replace       the session socket cannot be renamed
+PASS  u-second-broker-same-name      refused (exit 1), the session socket and broker unchanged: cotty-broker[bm30625] 2026/11/04 19:33:50 masking: no /home/lab/.config/cotty/secrets.conf; only the built-in token rule
+PASS  u-second-broker-insecure       refused (exit 1), the session socket and broker unchanged: cotty-broker[bm30625] 2026/11/04 19:33:50 masking: no /home/lab/.config/cotty/secrets.conf; only the built-in token rule
+PASS  u-insecure-broker-with-guard   refused: cotty: --dev-insecure is refused while cotty-guard is loaded: an insecure broker admits any process of the user 
+PASS  u-verify-broker-own-session    ok verified: pid 10034 is the broker of session bm30625 
+PASS  u-verify-broker-other-session  denied: refused: session "bm30625rc": the listener (pid 10034) is not the session's registered broker (pid 10062) 
+PASS  u-attach-forged-approval       denied: cannot listen on /run/user/1000/cotty/fk18997.sock: listen unix /run/user/1000/cotty/fk189 / client: 
+PASS  u-attach-forged-insecure       denied: cannot listen on /run/user/1000/cotty/fk18462.sock: listen unix /run/user/1000/cotty/fk184 / client: 
+PASS  u-pts-race-open                never opened /dev/pts/4: refused /dev/pts/4: operation not permitted
+
+summary: 82 pass, 0 fail (0 of them open review items), 0 gap (documented, guard needed), 0 skip (work dir /home/lab/cotty-bmatrix/20261104-193142)

@@ -1,0 +1,6 @@
+PASS  file-bind-rename-fails         rename onto a bound file fails as expected (exit 4: mv: cannot move '/home/lab/.cotty-lab-bound.json.tmp.7.1793730228035101259' to '/home/lab/.cotty-lab-bound.json': Device or resource busy)
+PASS  claude-config-dir              CLAUDE_CONFIG_DIR=~/.claude, settings seeded from ~/.claude.json
+PASS  claude-home-json-hidden        ~/.claude.json (which can define MCP servers) is not visible inside
+PASS  claude-rename-save             the rename save inside reached ~/.claude/.claude.json outside
+PASS  claude-home-json-unchanged     ~/.claude.json outside is unchanged
+PASS  claude-settings-protected      ~/.claude/settings.json cannot be replaced inside

@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # Build, vet and unit tests only. Sessions, the confinement and the
+    # escape matrix run in lab VMs (make vm-*), never on CI runners.
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt, vet, unit tests
+        run: make check
+      - name: build
+        run: make build
+      - name: cgo builds are refused
+        run: |
+          if CGO_ENABLED=1 go build -o /dev/null ./cmd/cotty 2>/dev/null; then
+            echo "a cgo build of cotty succeeded" >&2
+            exit 1
+          fi

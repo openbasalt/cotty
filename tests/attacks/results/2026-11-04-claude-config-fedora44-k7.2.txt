@@ -1,0 +1,16 @@
+PASS  file-bind-rename-fails         rename onto a bound file fails as expected (exit 4: mv: cannot move '/home/lab/.cotty-lab-bound.json.tmp.7.1793762319416854942' to '/home/lab/.cotty-lab-bound.json': Device or resource busy)
+PASS  claude-config-dir              CLAUDE_CONFIG_DIR=~/.claude, settings seeded from ~/.claude.json
+PASS  claude-home-json-hidden        ~/.claude.json (which can define MCP servers) is not visible inside
+PASS  claude-rename-save             the rename save inside reached ~/.claude/.claude.json outside
+PASS  claude-home-json-unchanged     ~/.claude.json outside is unchanged
+PASS  claude-settings-protected      ~/.claude/settings.json cannot be replaced inside
+FAIL  claude-settings-missing        [open: B7] created from inside, it persists outside: /home/lab/.claude/settings.json
+FAIL  claude-agents-dir              [open: B7] created from inside, it persists outside: /home/lab/.claude/agents/planted.md
+FAIL  claude-commands-dir            [open: B7] created from inside, it persists outside: /home/lab/.claude/commands/planted.md
+FAIL  claude-md                      [open: B7] created from inside, it persists outside: /home/lab/.claude/CLAUDE.md
+FAIL  codex-config-missing           [open: B7] created from inside, it persists outside: /home/lab/.codex/config.toml
+FAIL  gemini-settings-missing        [open: B7] created from inside, it persists outside: /home/lab/.gemini/settings.json
+FAIL  cursor-mcp-missing             [open: B7] created from inside, it persists outside: /home/lab/.cursor/mcp.json
+FAIL  cursor-hooks                   [open: B7] created from inside, it persists outside: /home/lab/.cursor/hooks.json
+FAIL  opencode-config-missing        [open: B7] created from inside, it persists outside: /home/lab/.config/opencode/opencode.json
+FAIL  opencode-plugin                [open: B7] created from inside, it persists outside: /home/lab/.config/opencode/plugin/planted.js

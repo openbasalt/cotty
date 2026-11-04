@@ -1,0 +1,15 @@
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+
+gpg prompts, guard not loaded, 6.19.10-300.fc44.x86_64, Fedora Linux 44 (Cloud Edition)
+RES   CHECK                            DETAIL
+PASS  gpg-loopback-lock                lock lit for git commit -S: LOCK timeout | git | gpg (started by agent)
+PASS  gpg-loopback-agent-frozen        agent view frozen during the prompt: 1 state event(s) while the secret prompt was active, 4 in total 
+PASS  gpg-loopback-commit-signed       git commit -S signed with the passphrase the person typed (verify-commit ok)
+PASS  gpg-loopback-clearsign           gpg --clearsign: lock (LOCK timeout | bash (as sh) > (not a system program) (started by agent)), signed
+PASS  gpg-loopback-agent-reads-pass    denied: marker absent from screen, scrollback and state (2020 bytes read) 
+GAP   gpg-pinentry-no-guard            without the guard pinentry-curses opens the pts and no lock lights (commit exit 124); use loopback
+PASS  gpg-pass-in-logs                 the passphrase is in no audit or broker log
+
+summary: 6 pass, 0 fail, 1 gap (documented), 0 skip (work dir /home/lab/cotty-gpg/20261104-200350)

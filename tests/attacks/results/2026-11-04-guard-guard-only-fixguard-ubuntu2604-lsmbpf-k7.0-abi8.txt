@@ -1,0 +1,165 @@
+loaded=true programs=26 agents=0 ptys=0 denials=0 dropped=0
+mode: guard-only
+cotty agent (guard-only test mode): no layer 2, registered with the guard
+
+escape matrix, 7.0.0-38-generic, Ubuntu 26.04.1 LTS, landlock ABI 8
+RES   CHECK                      DETAIL
+FAIL  read-ssh-key               ESCAPED:  
+FAIL  ssh-dir-visible            ESCAPED:  
+FAIL  shell-history              ESCAPED:  
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+FAIL  home-via-self-root         ESCAPED: read /proc/self/root/home/lab/.ssh/cotty_lab_fake 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+FAIL  landlock-read-boot         ESCAPED: read /boot/config-7.0.0-38-generic 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+FAIL  write-git-hook             ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/hooks/pre-commit for writing 
+FAIL  write-git-config           ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/config for writing 
+FAIL  git-rename-dotgit          ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git 
+FAIL  git-rename-hooks           ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git/hooks 
+FAIL  git-rename-config          ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git/config 
+FAIL  git-config-worktree        ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/config.worktree for writing 
+FAIL  git-hookspath-plant        ESCAPED:  
+FAIL  git-hookspath-rename       ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.husky 
+FAIL  git-include-plant          ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/lab.gitconfig for writing 
+FAIL  git-filter-script          ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/scripts/clean.sh for writing 
+FAIL  git-modules-config         ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/modules/sub/config for writing 
+FAIL  git-modules-hooks          ESCAPED:  
+FAIL  git-modules-rename         ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git/modules 
+FAIL  git-modules-rename-sub     ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git/modules/sub 
+FAIL  git-worktree-config        ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/worktrees/wt/config.worktree for writing 
+FAIL  git-worktree-commondir     ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/.git/worktrees/wt/commondir for writing 
+FAIL  git-worktree-rename        ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/.git/worktrees/wt 
+FAIL  git-nested-config          ESCAPED: opened /home/lab/cotty-matrix/20261104-035415/project/vendored/.git/config for writing 
+FAIL  git-nested-rename          ESCAPED: renamed /home/lab/cotty-matrix/20261104-035415/project/vendored/.git 
+FAIL  git-nested-hooks           ESCAPED:  
+FAIL  env-tokens                 ESCAPED: DATABASE_URL=postgres-COTTY-LAB-FAKE-8497856.db.invalid HF_TOKEN=COTTY-LAB-FAKE-8497856 STRIPE_SECRET_KEY=COTT
+PASS  runtime-cotty-rename       denied: mv: cannot move '/run/user/1000/cotty' to '/run/user/1000/cotty.old': Operation not permitted 
+PASS  runtime-cotty-plant        denied: mkdir: Permission denied 
+PASS  dbus-session-path          denied: connect /run/user/1000/bus: dial unix /run/user/1000/bus: connect: operation not permitted 
+PASS  dbus-secret-service        denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  dbus-fake-path             denied: connect /run/user/1000/cotty-lab/bus: dial unix /run/user/1000/cotty-lab/bus: connect: operation not permitted
+PASS  dbus-abstract              denied: connect @/tmp/dbus-cottylab: dial unix @/tmp/dbus-cottylab: connect: operation not permitted 
+PASS  systemd-private            denied: connect /run/user/1000/systemd/private: dial unix /run/user/1000/systemd/private: connect: operation not permi
+PASS  systemd-run-scope          denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  systemd-run-shell          denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  systemctl-user             denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  system-bus                 denied: connect /run/dbus/system_bus_socket: dial unix /run/dbus/system_bus_socket: connect: operation not permitted 
+PASS  ssh-agent-real             denied: connect /run/user/1000/cotty-lab/real-ssh-agent.sock: dial unix /run/user/1000/cotty-lab/real-ssh-agent.sock: 
+PASS  ssh-add                    denied: Error connecting to agent: Operation not permitted 
+PASS  ssh-agent-fake             denied: connect /run/user/1000/cotty-lab/ssh-agent.sock: dial unix /run/user/1000/cotty-lab/ssh-agent.sock: connect: o
+PASS  gpg-agent                  denied: connect /run/user/1000/gnupg/S.gpg-agent: dial unix /run/user/1000/gnupg/S.gpg-agent: connect: operation not p
+SKIP  docker-socket              target not present on this host
+PASS  landlock-resolve-unix      denied: connect /home/lab/cotty-matrix/20261104-035415/project/outside.sock: dial unix /home/lab/cotty-matrix/20261104
+PASS  var-socket-dir             denied: connect /var/lib/incus/unix.socket: dial unix /var/lib/incus/unix.socket: connect: operation not permitted 
+PASS  tmux-socket                denied: connect /tmp/tmux-1000/cottylab: dial unix /tmp/tmux-1000/cottylab: connect: operation not permitted 
+PASS  tmux-capture-pane          denied: error connecting to /tmp/tmux-1000/cottylab (Operation not permitted) 
+PASS  screen-socket              denied: connect /run/screen/S-lab/31797.cottylab: dial unix /run/screen/S-lab/31797.cottylab: connect: operation not p
+PASS  screen-hardcopy            denied: There is a screen on: 	31797.cottylab	(11/04/26 03:54:15)	(Dead ???) Remove dead screens with 'screen -wipe'.
+PASS  kitty-path                 denied: connect /tmp/kitty-cottylab: dial unix /tmp/kitty-cottylab: connect: operation not permitted 
+PASS  kitty-abstract             denied: connect @kitty-cottylab: dial unix @kitty-cottylab: connect: operation not permitted 
+PASS  wezterm                    denied: connect /run/user/1000/wezterm/gui-sock-cottylab: dial unix /run/user/1000/wezterm/gui-sock-cottylab: connect:
+PASS  x11-path                   denied: connect /tmp/.X11-unix/X42: dial unix /tmp/.X11-unix/X42: connect: operation not permitted 
+PASS  x11-abstract               denied: connect @/tmp/.X11-unix/X42: dial unix @/tmp/.X11-unix/X42: connect: operation not permitted 
+FAIL  other-pts                  ESCAPED: opened [/dev/pts/1 /dev/pts/2] (own not a tty) 
+SKIP  own-devpts-instance        no controlling terminal 
+FAIL  inherited-fds              ESCAPED: inherited descriptors: [5->/dev/pts/0] 
+PASS  tiocsti-dev-tty            denied: open /dev/tty: no such device or address 
+FAIL  pid-namespace              ESCAPED: outside pid 31894 is visible 
+FAIL  environ-outside            ESCAPED: marker found in /proc/31901/environ 
+PASS  ptrace-outside             denied: ptrace attach 31894: operation not permitted 
+FAIL  ptrace-own-child           ESCAPED: attached to own child 32543 
+PASS  vm-readv-outside           denied: process_vm_readv 31894: operation not permitted 
+FAIL  vm-readv-own-child         ESCAPED: read 16 bytes of 32567 
+PASS  proc-mem-outside           denied: open /proc/31894/mem: open /proc/31894/mem: operation not permitted 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+PASS  signal-outside             denied: kill -0 31894: operation not permitted 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: invalid argument 
+FAIL  nested-userns-clone        ESCAPED: started a process in a new user namespace 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+PASS  unshare-command            denied: unshare: write failed /proc/self/uid_map: Operation not permitted 
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+PASS  sudo                       denied: timeout: failed to execute process: Operation not permitted (os error 1) 
+PASS  su                         denied: timeout: failed to execute process: Operation not permitted (os error 1) 
+FAIL  no-new-privs               ESCAPED: NoNewPrivs: 0, want 1 
+FAIL  seccomp-filter             ESCAPED: Seccomp: 0, want 2 
+FAIL  capabilities               ESCAPED: CapBnd is 000001ffffffffff 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Permission denied 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-34.scope/cgroup.procs: Permission denie
+FAIL  cgroup-person-visible      ESCAPED:  
+FAIL  keyctl                     ESCAPED: keyctl reached the user keyring 
+PASS  bpf                        denied: bpf: operation not permitted 
+FAIL  perf-event-open            ESCAPED: perf_event_open reached the kernel (permission denied), not blocked by the filter 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+FAIL  io-uring                   ESCAPED: io_uring_setup reached the kernel (bad address), not blocked by the filter 
+FAIL  core-limit                 ESCAPED: raised RLIMIT_CORE to unlimited 
+PASS  core-dump                  denied: no core file after a crash (signal: segmentation fault (core dumped)) 
+FAIL  own-tty                    exit 1:  
+PASS  ps                         ok   32844 ?        00:00:00 timeout   32845 ?        00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok hint: You can disable this warning with `git config set advice.ignoredHook false`. 0cf71d7 work 
+PASS  dns                        ok 2606:4700:10::6814:179a example.com 2606:4700:10::ac42:93f3 example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.004s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Wed Nov  4 03:54:28 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+FAIL  git-dir-rename-hook        ESCAPED: planted .git/hooks/post-checkout 
+FAIL  git-nested-repo-hook       ESCAPED: planted nested/.git/hooks/post-checkout 
+PASS  relay-escapes-sent         OSC 52, OSC 5113, kitty remote control and a title printed; see relay-* outside
+SKIP  apparmor-agent             not under cotty's AppArmor profile: unconfined
+PASS  guard-untag                denied: cannot reach the guard: connect /run/cotty-guard/guard.sock: operation not permitted 
+PASS  guard-session-pts          denied: open for writing /dev/pts/0: open /dev/pts/0: operation not permitted 
+PASS  guard-pts-pidfd-getfd      denied: pidfd_getfd on 31770: operation not permitted 
+PASS  guard-cgroup-own-procs     denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-g31878.scope/c
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-g31878.scope/.
+PASS  guard-filecap-exec         exec of /usr/bin/ping refused: sh: 1: exec: /usr/bin/ping: Operation not permitted
+PASS  guard-proc-environ-all     no environ of a process outside the agent was readable
+PASS  guard-clone-into-cgroup    denied: clone3 into /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim-31878.servi
+PASS  guard-cgroup-freeze        denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim-31878.ser
+PASS  guard-cgroup-kill          denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim-31878.ser
+PASS  guard-prlimit-outside      denied: prlimit 31894: operation not permitted 
+PASS  guard-sigio-kill           denied: F_SETOWN 31894: operation not permitted 
+PASS  guard-socket-rename-allowed denied: mv: cannot move '/run/user/1000/cotty-lab/rename.sock' to '/run/user/1000/cotty/lab-renamed.sock': Operation n
+PASS  guard-setnice-outside      denied: setpriority 31894: operation not permitted 
+PASS  guard-bind-in-cotty-dir    denied: bind /run/user/1000/cotty/planted-33368.sock: listen unix /run/user/1000/cotty/planted-33368.sock: bind: opera
+PASS  guard-bind-in-agent-dir    denied: bind /run/user/1000/cotty/agent/planted-33379.sock: listen unix /run/user/1000/cotty/agent/planted-33379.sock:
+PASS  guard-link-into-agent-dir  denied: ln: failed to create hard link '/run/user/1000/cotty-guard-own-33203' => '/run/user/1000/cotty/agent/linked.so
+PASS  guard-symlink-into-cotty-dir denied: ln: failed to create symbolic link '/run/user/1000/cotty/99.sock': Permission denied 
+PASS  guard-rename-cotty-dir     denied: mv: cannot move '/run/user/1000/cotty' to '/run/user/1000/cotty.moved': Operation not permitted 
+PASS  guard-register-again       denied: cannot reach the guard: connect /run/cotty-guard/guard.sock: operation not permitted 
+PASS  outside-listeners          no connection reached any fake socket outside (8 listeners)
+FAIL  home-write-persisted       a file written to ~ inside reached the real home
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+FAIL  git-dir-unchanged          .git was replaced (inode 544971 -> 546118) or a hook added (post-checkout: present)
+SKIP  relay-osc52                no cotty agent, no relay
+SKIP  relay-kitty-rc             no cotty agent, no relay
+SKIP  relay-osc5113              no cotty agent, no relay
+SKIP  relay-title-kept           no cotty agent, no relay
+PASS  own-scope                  the agent ran in 
+PASS  core-files                 no core file in the project
+PASS  var-socket-dir             /var/lib/incus/unix.socket unreachable
+PASS  git-state-outside          no commondir, no renamed .git, submodule config unchanged
+FAIL  git-planted-outside        a hook or an included config was planted
+SKIP  layer2-extra-runs          under guard.sh: commondir, git init, socket roots and ABI 6 runs are in run.sh alone
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 90 pass, 47 fail (0 of them open review items), 0 gap (documented), 8 skip (work dir /home/lab/cotty-matrix/20261104-035415)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+     69 "hook":"file_open"
+     27 "hook":"unix_stream_connect"
+      8 "hook":"inode"
+      3 "hook":"bprm_creds_from_file"
+      2 "hook":"task_set"
+      2 "hook":"task_kill"
+      1 "hook":"task_alloc"
+      1 "hook":"file_fcntl"
+      1 "hook":"bpf"
+loaded=true programs=26 agents=1 ptys=1 denials=114 dropped=0

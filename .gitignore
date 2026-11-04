@@ -1,0 +1,4 @@
+/bin/
+*.test
+# Scratch and review notes; never committed.
+temp*/

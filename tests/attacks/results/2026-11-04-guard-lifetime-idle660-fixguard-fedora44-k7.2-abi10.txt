@@ -1,0 +1,27 @@
+session gl27620: broker 39545, shell 39555, pts /dev/pts/2; agent 39563 tagged agent:14541
+PASS  start-strong                       the session reports strong
+PASS  start-pts-by-path                  denied: open /dev/pts/2: operation not permitted 
+PASS  start-pts-via-proc-fd              denied: open /proc/39555/fd/0: operation not permitted 
+PASS  start-agent-tagged                 the agent is tagged (agent:14541)
+PASS  start-steal-protection             denied: refused: the terminal is already protected by process 39545 
+idle for 660 s
+PASS  idle-pts-by-path                   denied: open /dev/pts/2: operation not permitted 
+PASS  idle-pts-via-proc-fd               denied: open /proc/39555/fd/0: operation not permitted 
+PASS  idle-strong                        after 660 s idle the session still reports strong
+PASS  restart-pts-by-path                denied: open /dev/pts/2: operation not permitted 
+PASS  restart-pts-via-proc-fd            denied: open /proc/39555/fd/0: operation not permitted 
+PASS  restart-agent-tag-kept             the agent's tag survived the restart (agent:14541)
+PASS  restart-strong                     strong again once the restarted guard confirms the protection
+PASS  stopped-pts-by-path                denied: open /dev/pts/2: operation not permitted 
+PASS  stopped-pts-via-proc-fd            denied: open /proc/39555/fd/0: operation not permitted 
+PASS  stopped-not-strong                 not strong while the guard does not answer
+PASS  started-strong                     strong again after the start
+cotty-guard: programs detached, maps removed
+PASS  uninstall-not-strong               after the protection lapsed the session stays below strong
+PASS  reprotected-pts-by-path            denied: open /dev/pts/2: operation not permitted 
+PASS  reprotected-pts-via-proc-fd        denied: open /proc/39555/fd/0: operation not permitted 
+PASS  uninstall-still-not-strong         still below strong after the session protected its pts again
+PASS  broker-gone-released               the session's protection is gone once its broker exited (back to 2, within the 30 s sweep)
+
+guard lifetime matrix, 7.2.15-200.fc44.x86_64, Fedora Linux 44 (Cloud Edition), idle 660 s
+summary: 21 pass, 0 fail, 0 skip

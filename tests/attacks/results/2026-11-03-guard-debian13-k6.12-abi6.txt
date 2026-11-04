@@ -1,0 +1,447 @@
+######## guard.sh none
+mode: none
+cotty agent (unconfined baseline): no layer 2, not registered
+
+escape matrix, 6.12.115+deb13.1-cloud-amd64, Debian GNU/Linux 13 (trixie), landlock ABI 6
+RES   CHECK                      DETAIL
+FAIL  read-ssh-key               ESCAPED:  
+FAIL  ssh-dir-visible            ESCAPED:  
+FAIL  shell-history              ESCAPED:  
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+FAIL  home-via-self-root         ESCAPED: read /proc/self/root/home/lab/.ssh/cotty_lab_fake 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+FAIL  landlock-read-boot         ESCAPED: read /boot/grub/grubenv 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+FAIL  write-git-hook             ESCAPED: opened /home/lab/cotty-matrix/20261103-223912/project/.git/hooks/pre-commit for writing 
+FAIL  write-git-config           ESCAPED: opened /home/lab/cotty-matrix/20261103-223912/project/.git/config for writing 
+PASS  dbus-session-path          denied: connect /run/user/1000/bus: dial unix /run/user/1000/bus: connect: no such file or directory 
+PASS  dbus-secret-service        denied: Failed to connect to user scope bus via local transport: No such file or directory 
+FAIL  dbus-fake-path             ESCAPED: connected to /run/user/1000/cotty-lab/bus 
+FAIL  dbus-abstract              ESCAPED: connected to @/tmp/dbus-cottylab 
+FAIL  systemd-private            ESCAPED: connected to /run/user/1000/systemd/private 
+FAIL  systemd-run-scope          ESCAPED: Running as unit: run-p28237-i28537.scope; invocation ID: 8c662461375e47ae8fd816d2b605c49c 
+PASS  systemd-run-shell          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+FAIL  systemctl-user             ESCAPED: HOME=/home/lab LANG=C.UTF-8 LOGNAME=lab PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin SHELL=/bin/bash
+FAIL  system-bus                 ESCAPED: connected to /run/dbus/system_bus_socket 
+FAIL  ssh-agent-real             ESCAPED: connected to /run/user/1000/cotty-lab/real-ssh-agent.sock 
+PASS  ssh-add                    denied: The agent has no identities. 
+FAIL  ssh-agent-fake             ESCAPED: connected to /run/user/1000/cotty-lab/ssh-agent.sock 
+PASS  gpg-agent                  denied: connect /run/user/1000/gnupg/S.gpg-agent: dial unix /run/user/1000/gnupg/S.gpg-agent: connect: no such file or
+SKIP  docker-socket              target not present on this host
+SKIP  landlock-resolve-unix      Landlock ABI 6 < 9 does not mediate pathname sockets visible inside: connected to /home/lab/cotty-matrix/20261103-223912/project/outside.sock
+FAIL  tmux-socket                ESCAPED: connected to /tmp/tmux-1000/cottylab 
+FAIL  tmux-capture-pane          ESCAPED:  
+FAIL  screen-socket              ESCAPED: connected to /run/screen/S-lab/27966.cottylab 
+FAIL  screen-hardcopy            ESCAPED:  
+FAIL  kitty-path                 ESCAPED: connected to /tmp/kitty-cottylab 
+FAIL  kitty-abstract             ESCAPED: connected to @kitty-cottylab 
+FAIL  wezterm                    ESCAPED: connected to /run/user/1000/wezterm/gui-sock-cottylab 
+FAIL  x11-path                   ESCAPED: connected to /tmp/.X11-unix/X42 
+FAIL  x11-abstract               ESCAPED: connected to @/tmp/.X11-unix/X42 
+FAIL  other-pts                  ESCAPED: opened [/dev/pts/1 /dev/pts/2] (own not a tty) 
+SKIP  own-devpts-instance        no controlling terminal 
+FAIL  inherited-fds              ESCAPED: inherited descriptors: [5->/dev/pts/0] 
+PASS  tiocsti-dev-tty            denied: open /dev/tty: no such device or address 
+FAIL  pid-namespace              ESCAPED: outside pid 27903 is visible 
+FAIL  environ-outside            ESCAPED: marker found in /proc/27903/environ 
+FAIL  ptrace-outside             ESCAPED: attached to 27903 
+FAIL  ptrace-own-child           ESCAPED: attached to own child 28495 
+FAIL  vm-readv-outside           ESCAPED: read 16 bytes of 27903 
+FAIL  vm-readv-own-child         ESCAPED: read 16 bytes of 28519 
+PASS  proc-mem-outside           denied: read /proc/27903/mem: read /proc/27903/mem: input/output error 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+FAIL  signal-outside             ESCAPED: signal 0 delivered to 27903 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: invalid argument 
+FAIL  nested-userns-clone        ESCAPED: started a process in a new user namespace 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+FAIL  unshare-command            ESCAPED:  
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+FAIL  sudo                       ESCAPED:  
+PASS  su                         denied: Password: su: Authentication failure 
+FAIL  no-new-privs               ESCAPED: NoNewPrivs: 0, want 1 
+FAIL  seccomp-filter             ESCAPED: Seccomp: 0, want 2 
+FAIL  capabilities               ESCAPED: CapBnd is 000001ffffffffff 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Permission denied 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-70.scope/cgroup.procs: Permission denie
+FAIL  cgroup-person-visible      ESCAPED:  
+FAIL  keyctl                     ESCAPED: keyctl reached the user keyring 
+FAIL  bpf                        ESCAPED: bpf reached the kernel (invalid argument), not blocked by the filter 
+FAIL  perf-event-open            ESCAPED: perf_event_open reached the kernel (bad address), not blocked by the filter 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+FAIL  io-uring                   ESCAPED: io_uring_setup reached the kernel (bad address), not blocked by the filter 
+FAIL  core-limit                 ESCAPED: raised RLIMIT_CORE to unlimited 
+FAIL  core-dump                  ESCAPED: core file written: [core.28772] 
+FAIL  own-tty                    exit 1:  
+PASS  ps                         ok   28788 ?        00:00:00 timeout   28789 ?        00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok 1939537 work 
+PASS  dns                        ok 2606:4700:10::6814:179a example.com 2606:4700:10::ac42:93f3 example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.004s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Tue Nov  3 22:39:23 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+PASS  guard-untag                denied: refused: the guard never removes a tag or a registration; they end with the agent's processes and cgroup 
+FAIL  guard-register-again       ESCAPED: accepted 
+PASS  guard-session-pts          denied: open for writing /dev/pts/0: open /dev/pts/0: operation not permitted 
+PASS  guard-cgroup-own-procs     denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-n28063.scope/c
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-n28063.scope/.
+SKIP  guard-filecap-exec         no file capability binary found
+PASS  guard-proc-environ-all     no environ of a process outside the agent was readable
+FAIL  outside-listeners          2026-11-03T22:39:13Z connection on /run/user/1000/cotty-lab/bus;2026-11-03T22:39:13Z connection on @/tmp/dbus-cottylab;2026-11-03T22:39:13Z connection on /run/user/1000/cotty-lab/ssh-agent.sock;2026-11-03T22:39:13Z connection on /tmp/kitty-cottylab;2026-11-03T22:39:13Z connection on @kitty-cottylab;2026-11-03T22:39:13Z connection on /run/user/1000/wezterm/gui-sock-cottylab;2026-11-03T22:39:13Z connection on /tmp/.X11-unix/X42;2026-11-03T22:39:13Z connection on @/tmp/.X11-unix/X42;
+FAIL  home-write-persisted       a file written to ~ inside reached the real home
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+PASS  own-scope                  the agent ran in 
+PASS  core-files                 no core file in the project
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 43 pass, 50 fail, 4 skip (work dir /home/lab/cotty-matrix/20261103-223912)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+     22 "hook":"file_open"
+loaded=true programs=11 agents=1 denials=22
+
+######## guard.sh guard-only
+loaded=true programs=11 agents=1 denials=22
+mode: guard-only
+cotty agent (guard-only test mode): no layer 2, registered with the guard
+
+escape matrix, 6.12.115+deb13.1-cloud-amd64, Debian GNU/Linux 13 (trixie), landlock ABI 6
+RES   CHECK                      DETAIL
+FAIL  read-ssh-key               ESCAPED:  
+FAIL  ssh-dir-visible            ESCAPED:  
+FAIL  shell-history              ESCAPED:  
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+FAIL  home-via-self-root         ESCAPED: read /proc/self/root/home/lab/.ssh/cotty_lab_fake 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+FAIL  landlock-read-boot         ESCAPED: read /boot/grub/grubenv 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+FAIL  write-git-hook             ESCAPED: opened /home/lab/cotty-matrix/20261103-223924/project/.git/hooks/pre-commit for writing 
+FAIL  write-git-config           ESCAPED: opened /home/lab/cotty-matrix/20261103-223924/project/.git/config for writing 
+PASS  dbus-session-path          denied: connect /run/user/1000/bus: dial unix /run/user/1000/bus: connect: no such file or directory 
+PASS  dbus-secret-service        denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  dbus-fake-path             denied: connect /run/user/1000/cotty-lab/bus: dial unix /run/user/1000/cotty-lab/bus: connect: operation not permitted
+PASS  dbus-abstract              denied: connect @/tmp/dbus-cottylab: dial unix @/tmp/dbus-cottylab: connect: operation not permitted 
+PASS  systemd-private            denied: connect /run/user/1000/systemd/private: dial unix /run/user/1000/systemd/private: connect: operation not permi
+PASS  systemd-run-scope          denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  systemd-run-shell          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  systemctl-user             denied: Failed to connect to user scope bus via local transport: Operation not permitted (consider using --machine=<us
+PASS  system-bus                 denied: connect /run/dbus/system_bus_socket: dial unix /run/dbus/system_bus_socket: connect: operation not permitted 
+PASS  ssh-agent-real             denied: connect /run/user/1000/cotty-lab/real-ssh-agent.sock: dial unix /run/user/1000/cotty-lab/real-ssh-agent.sock: 
+PASS  ssh-add                    denied: Error connecting to agent: Operation not permitted 
+PASS  ssh-agent-fake             denied: connect /run/user/1000/cotty-lab/ssh-agent.sock: dial unix /run/user/1000/cotty-lab/ssh-agent.sock: connect: o
+PASS  gpg-agent                  denied: connect /run/user/1000/gnupg/S.gpg-agent: dial unix /run/user/1000/gnupg/S.gpg-agent: connect: no such file or
+SKIP  docker-socket              target not present on this host
+SKIP  landlock-resolve-unix      Landlock ABI 6 < 9 does not mediate pathname sockets visible inside: connect /home/lab/cotty-matrix/20261103-223924/project/outside.sock: dial unix /home/lab/cotty-matrix/20261103-223924/project/outside.sock: connect: operation not permitted
+PASS  tmux-socket                denied: connect /tmp/tmux-1000/cottylab: dial unix /tmp/tmux-1000/cottylab: connect: operation not permitted 
+PASS  tmux-capture-pane          denied: error connecting to /tmp/tmux-1000/cottylab (Operation not permitted) 
+PASS  screen-socket              denied: connect /run/screen/S-lab/29361.cottylab: dial unix /run/screen/S-lab/29361.cottylab: connect: operation not p
+PASS  screen-hardcopy            denied: There is a screen on: 	29361.cottylab	(11/03/26 22:39:24)	(Dead ???) Remove dead screens with 'screen -wipe'.
+PASS  kitty-path                 denied: connect /tmp/kitty-cottylab: dial unix /tmp/kitty-cottylab: connect: operation not permitted 
+PASS  kitty-abstract             denied: connect @kitty-cottylab: dial unix @kitty-cottylab: connect: operation not permitted 
+PASS  wezterm                    denied: connect /run/user/1000/wezterm/gui-sock-cottylab: dial unix /run/user/1000/wezterm/gui-sock-cottylab: connect:
+PASS  x11-path                   denied: connect /tmp/.X11-unix/X42: dial unix /tmp/.X11-unix/X42: connect: operation not permitted 
+PASS  x11-abstract               denied: connect @/tmp/.X11-unix/X42: dial unix @/tmp/.X11-unix/X42: connect: operation not permitted 
+FAIL  other-pts                  ESCAPED: opened [/dev/pts/2 /dev/pts/3] (own not a tty) 
+SKIP  own-devpts-instance        no controlling terminal 
+FAIL  inherited-fds              ESCAPED: inherited descriptors: [5->/dev/pts/1] 
+PASS  tiocsti-dev-tty            denied: open /dev/tty: no such device or address 
+FAIL  pid-namespace              ESCAPED: outside pid 29334 is visible 
+PASS  environ-outside            denied: marker in no visible environ (144 processes visible) 
+PASS  ptrace-outside             denied: ptrace attach 29334: operation not permitted 
+FAIL  ptrace-own-child           ESCAPED: attached to own child 29842 
+PASS  vm-readv-outside           denied: process_vm_readv 29334: operation not permitted 
+FAIL  vm-readv-own-child         ESCAPED: read 16 bytes of 29866 
+PASS  proc-mem-outside           denied: open /proc/29334/mem: open /proc/29334/mem: operation not permitted 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+PASS  signal-outside             denied: kill -0 29334: operation not permitted 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: invalid argument 
+FAIL  nested-userns-clone        ESCAPED: started a process in a new user namespace 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+FAIL  unshare-command            ESCAPED:  
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+PASS  sudo                       denied: timeout: failed to run command ‘sudo’: Operation not permitted 
+PASS  su                         denied: timeout: failed to run command ‘su’: Operation not permitted 
+FAIL  no-new-privs               ESCAPED: NoNewPrivs: 0, want 1 
+FAIL  seccomp-filter             ESCAPED: Seccomp: 0, want 2 
+FAIL  capabilities               ESCAPED: CapBnd is 000001ffffffffff 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Permission denied 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-70.scope/cgroup.procs: Permission denie
+FAIL  cgroup-person-visible      ESCAPED:  
+FAIL  keyctl                     ESCAPED: keyctl reached the user keyring 
+PASS  bpf                        denied: bpf: operation not permitted 
+FAIL  perf-event-open            ESCAPED: perf_event_open reached the kernel (bad address), not blocked by the filter 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+FAIL  io-uring                   ESCAPED: io_uring_setup reached the kernel (bad address), not blocked by the filter 
+FAIL  core-limit                 ESCAPED: raised RLIMIT_CORE to unlimited 
+FAIL  core-dump                  ESCAPED: core file written: [core.30112] 
+FAIL  own-tty                    exit 1:  
+PASS  ps                         ok   30128 ?        00:00:00 timeout   30129 ?        00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok 4d94a14 work 
+PASS  dns                        ok 2606:4700:10::6814:179a example.com 2606:4700:10::ac42:93f3 example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.005s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Tue Nov  3 22:39:34 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+PASS  guard-untag                denied: cannot reach the guard: connect /run/cotty-guard/guard.sock: operation not permitted 
+PASS  guard-register-again       denied: cannot reach the guard: connect /run/cotty-guard/guard.sock: operation not permitted 
+PASS  guard-session-pts          denied: open for writing /dev/pts/1: open /dev/pts/1: operation not permitted 
+PASS  guard-cgroup-own-procs     denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-g29409.scope/c
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-g29409.scope/.
+SKIP  guard-filecap-exec         no file capability binary found
+PASS  guard-proc-environ-all     no environ of a process outside the agent was readable
+PASS  outside-listeners          no connection reached any fake socket outside (8 listeners)
+FAIL  home-write-persisted       a file written to ~ inside reached the real home
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+PASS  own-scope                  the agent ran in 
+PASS  core-files                 no core file in the project
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 68 pass, 25 fail, 4 skip (work dir /home/lab/cotty-matrix/20261103-223924)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+     87 "hook":"file_open"
+     21 "hook":"unix_stream_connect"
+      2 "hook":"ptrace_access_check"
+      2 "hook":"bprm_creds_from_file"
+      1 "hook":"task_kill"
+      1 "hook":"bpf"
+loaded=true programs=11 agents=2 denials=115
+
+######## guard.sh layer2
+mode: layer2
+cotty agent: profile generic, project /home/lab/cotty-matrix/20261103-224032/project, assurance confined (landlock ABI 6, cgroup cotty-agent-4e34778e29a2.scope)
+
+escape matrix, 6.12.115+deb13.1-cloud-amd64, Debian GNU/Linux 13 (trixie), landlock ABI 6
+RES   CHECK                      DETAIL
+PASS  read-ssh-key               denied: grep: /home/lab/.ssh/cotty_lab_fake: No such file or directory 
+PASS  ssh-dir-visible            denied:  
+PASS  shell-history              denied: grep: /home/lab/.bash_history: No such file or directory 
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+PASS  home-via-self-root         denied: open /proc/self/root/home/lab/.ssh/cotty_lab_fake: open /proc/self/root/home/lab/.ssh/cotty_lab_fake: no such 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+PASS  landlock-read-boot         denied: open /boot/grub/grubenv: open /boot/grub/grubenv: permission denied 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+PASS  write-git-hook             denied: open for writing /home/lab/cotty-matrix/20261103-224032/project/.git/hooks/pre-commit: open /home/lab/cotty-ma
+PASS  write-git-config           denied: open for writing /home/lab/cotty-matrix/20261103-224032/project/.git/config: open /home/lab/cotty-matrix/20261
+PASS  dbus-session-path          denied: connect /run/user/1000/bus: dial unix /run/user/1000/bus: connect: no such file or directory 
+PASS  dbus-secret-service        denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  dbus-fake-path             denied: connect /run/user/1000/cotty-lab/bus: dial unix /run/user/1000/cotty-lab/bus: connect: no such file or directo
+PASS  dbus-abstract              denied: connect @/tmp/dbus-cottylab: dial unix @/tmp/dbus-cottylab: connect: operation not permitted 
+PASS  systemd-private            denied: connect /run/user/1000/systemd/private: dial unix /run/user/1000/systemd/private: connect: no such file or dir
+PASS  systemd-run-scope          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  systemd-run-shell          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  systemctl-user             denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  system-bus                 denied: connect /run/dbus/system_bus_socket: dial unix /run/dbus/system_bus_socket: connect: no such file or directory
+PASS  ssh-agent-real             denied: connect /run/user/1000/cotty-lab/real-ssh-agent.sock: dial unix /run/user/1000/cotty-lab/real-ssh-agent.sock: 
+PASS  ssh-add                    denied: Error connecting to agent: No such file or directory 
+PASS  ssh-agent-fake             denied: connect /run/user/1000/cotty-lab/ssh-agent.sock: dial unix /run/user/1000/cotty-lab/ssh-agent.sock: connect: n
+PASS  gpg-agent                  denied: connect /run/user/1000/gnupg/S.gpg-agent: dial unix /run/user/1000/gnupg/S.gpg-agent: connect: no such file or
+SKIP  docker-socket              target not present on this host
+SKIP  landlock-resolve-unix      Landlock ABI 6 < 9 does not mediate pathname sockets visible inside: connected to /home/lab/cotty-matrix/20261103-224032/project/outside.sock
+PASS  tmux-socket                denied: connect /tmp/tmux-1000/cottylab: dial unix /tmp/tmux-1000/cottylab: connect: no such file or directory 
+PASS  tmux-capture-pane          denied: error connecting to /tmp/tmux-1000/cottylab (No such file or directory) 
+PASS  screen-socket              denied: connect /run/screen/S-lab/34078.cottylab: dial unix /run/screen/S-lab/34078.cottylab: connect: no such file or
+PASS  screen-hardcopy            denied: Cannot make directory '/run/screen': Permission denied 
+PASS  kitty-path                 denied: connect /tmp/kitty-cottylab: dial unix /tmp/kitty-cottylab: connect: no such file or directory 
+PASS  kitty-abstract             denied: connect @kitty-cottylab: dial unix @kitty-cottylab: connect: operation not permitted 
+PASS  wezterm                    denied: connect /run/user/1000/wezterm/gui-sock-cottylab: dial unix /run/user/1000/wezterm/gui-sock-cottylab: connect:
+PASS  x11-path                   denied: connect /tmp/.X11-unix/X42: dial unix /tmp/.X11-unix/X42: connect: no such file or directory 
+PASS  x11-abstract               denied: connect @/tmp/.X11-unix/X42: dial unix @/tmp/.X11-unix/X42: connect: operation not permitted 
+PASS  other-pts                  denied: no pts but the own one (/dev/pts/0) can be opened 
+PASS  own-devpts-instance        denied: the agent's pts /dev/pts/0 is in a private devpts instance (dev 59, outside 24) 
+PASS  inherited-fds              denied: only stdio inherited (runtime: [4->anon_inode:[eventpoll] 5->anon_inode:[eventfd]]) 
+PASS  tiocsti-dev-tty            denied: TIOCSTI: operation not permitted 
+PASS  pid-namespace              denied: 6 processes visible, outside pid 34050 is not 
+PASS  environ-outside            denied: marker in no visible environ (6 processes visible) 
+PASS  ptrace-outside             denied: ptrace attach 34050: operation not permitted 
+PASS  ptrace-own-child           denied: ptrace own child: operation not permitted (seccomp) 
+PASS  vm-readv-outside           denied: process_vm_readv 34050: operation not permitted 
+PASS  vm-readv-own-child         denied: process_vm_readv 452: operation not permitted 
+PASS  proc-mem-outside           denied: open /proc/34050/mem: open /proc/34050/mem: no such file or directory 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+PASS  signal-outside             denied: kill -0 34050: no such process 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: operation not permitted 
+PASS  nested-userns-clone        denied: clone(CLONE_NEWUSER): fork/exec /bin/true: operation not permitted 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+PASS  unshare-command            denied: unshare: unshare failed: Operation not permitted 
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+PASS  sudo                       denied: sudo: /etc/sudo.conf is owned by uid 65534, should be 0 sudo: The "no new privileges" flag is set, which preve
+PASS  su                         denied: Password: su: Authentication failure 
+PASS  no-new-privs               denied: NoNewPrivs: 1 
+PASS  seccomp-filter             denied: Seccomp: 2 
+PASS  capabilities               denied: no capabilities held 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Read-only file system 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-70.scope/cgroup.procs: Directory nonexi
+PASS  cgroup-person-visible      denied:  
+PASS  keyctl                     denied: keyctl: operation not permitted 
+PASS  bpf                        denied: bpf: operation not permitted 
+PASS  perf-event-open            denied: perf_event_open: operation not permitted 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+PASS  io-uring                   denied: io_uring_setup: operation not permitted 
+PASS  core-limit                 denied: RLIMIT_CORE stays 0 (operation not permitted) 
+PASS  core-dump                  denied: no core file after a crash (signal: segmentation fault) 
+PASS  own-tty                    ok /dev/pts/0 
+PASS  ps                         ok     712 pts/0    00:00:00 timeout     713 pts/0    00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok 965be22 work 
+PASS  dns                        ok 2606:4700:10::ac42:93f3 example.com 2606:4700:10::6814:179a example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.003s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Tue Nov  3 22:40:56 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+PASS  guard-untag                denied: cannot reach the guard: cotty-guard is not running 
+PASS  guard-register-again       denied: cannot reach the guard: cotty-guard is not running 
+PASS  guard-session-pts          the person's pts is not visible (private devpts instance)
+PASS  guard-cgroup-own-procs     denied: bash: line 1: /sys/fs/cgroup//cgroup.procs: Read-only file system 
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: /sys/fs/cgroup//../cgroup.procs: Permission denied 
+SKIP  guard-filecap-exec         no file capability binary found
+PASS  guard-proc-environ-all     no environ of a process outside the agent was readable
+PASS  outside-listeners          no connection reached any fake socket outside (8 listeners)
+PASS  home-write-persisted       files written to ~ inside stayed in the private tmpfs
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+PASS  own-scope                  the agent ran in cotty-agent-4e34778e29a2.scope
+PASS  core-files                 no core file in the project
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 94 pass, 0 fail, 3 skip (work dir /home/lab/cotty-matrix/20261103-224032)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+cotty-guard is not running
+
+######## guard.sh both
+loaded=true programs=11 agents=2 denials=115
+mode: both
+cotty agent: profile generic, project /home/lab/cotty-matrix/20261103-223935/project, assurance confined (landlock ABI 6, cgroup cotty-agent-5945c645ee2e.scope)
+
+escape matrix, 6.12.115+deb13.1-cloud-amd64, Debian GNU/Linux 13 (trixie), landlock ABI 6
+RES   CHECK                      DETAIL
+PASS  read-ssh-key               denied: grep: /home/lab/.ssh/cotty_lab_fake: No such file or directory 
+PASS  ssh-dir-visible            denied:  
+PASS  shell-history              denied: grep: /home/lab/.bash_history: No such file or directory 
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+PASS  home-via-self-root         denied: open /proc/self/root/home/lab/.ssh/cotty_lab_fake: open /proc/self/root/home/lab/.ssh/cotty_lab_fake: no such 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+PASS  landlock-read-boot         denied: open /boot/grub/grubenv: open /boot/grub/grubenv: permission denied 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+PASS  write-git-hook             denied: open for writing /home/lab/cotty-matrix/20261103-223935/project/.git/hooks/pre-commit: open /home/lab/cotty-ma
+PASS  write-git-config           denied: open for writing /home/lab/cotty-matrix/20261103-223935/project/.git/config: open /home/lab/cotty-matrix/20261
+PASS  dbus-session-path          denied: connect /run/user/1000/bus: dial unix /run/user/1000/bus: connect: no such file or directory 
+PASS  dbus-secret-service        denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  dbus-fake-path             denied: connect /run/user/1000/cotty-lab/bus: dial unix /run/user/1000/cotty-lab/bus: connect: no such file or directo
+PASS  dbus-abstract              denied: connect @/tmp/dbus-cottylab: dial unix @/tmp/dbus-cottylab: connect: operation not permitted 
+PASS  systemd-private            denied: connect /run/user/1000/systemd/private: dial unix /run/user/1000/systemd/private: connect: no such file or dir
+PASS  systemd-run-scope          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  systemd-run-shell          denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  systemctl-user             denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  system-bus                 denied: connect /run/dbus/system_bus_socket: dial unix /run/dbus/system_bus_socket: connect: no such file or directory
+PASS  ssh-agent-real             denied: connect /run/user/1000/cotty-lab/real-ssh-agent.sock: dial unix /run/user/1000/cotty-lab/real-ssh-agent.sock: 
+PASS  ssh-add                    denied: Error connecting to agent: No such file or directory 
+PASS  ssh-agent-fake             denied: connect /run/user/1000/cotty-lab/ssh-agent.sock: dial unix /run/user/1000/cotty-lab/ssh-agent.sock: connect: n
+PASS  gpg-agent                  denied: connect /run/user/1000/gnupg/S.gpg-agent: dial unix /run/user/1000/gnupg/S.gpg-agent: connect: no such file or
+SKIP  docker-socket              target not present on this host
+SKIP  landlock-resolve-unix      Landlock ABI 6 < 9 does not mediate pathname sockets visible inside: connect /home/lab/cotty-matrix/20261103-223935/project/outside.sock: dial unix /home/lab/cotty-matrix/20261103-223935/project/outside.sock: connect: operation not permitted
+PASS  tmux-socket                denied: connect /tmp/tmux-1000/cottylab: dial unix /tmp/tmux-1000/cottylab: connect: no such file or directory 
+PASS  tmux-capture-pane          denied: error connecting to /tmp/tmux-1000/cottylab (No such file or directory) 
+PASS  screen-socket              denied: connect /run/screen/S-lab/30701.cottylab: dial unix /run/screen/S-lab/30701.cottylab: connect: no such file or
+PASS  screen-hardcopy            denied: Cannot make directory '/run/screen': Permission denied 
+PASS  kitty-path                 denied: connect /tmp/kitty-cottylab: dial unix /tmp/kitty-cottylab: connect: no such file or directory 
+PASS  kitty-abstract             denied: connect @kitty-cottylab: dial unix @kitty-cottylab: connect: operation not permitted 
+PASS  wezterm                    denied: connect /run/user/1000/wezterm/gui-sock-cottylab: dial unix /run/user/1000/wezterm/gui-sock-cottylab: connect:
+PASS  x11-path                   denied: connect /tmp/.X11-unix/X42: dial unix /tmp/.X11-unix/X42: connect: no such file or directory 
+PASS  x11-abstract               denied: connect @/tmp/.X11-unix/X42: dial unix @/tmp/.X11-unix/X42: connect: operation not permitted 
+PASS  other-pts                  denied: no pts but the own one (/dev/pts/0) can be opened 
+PASS  own-devpts-instance        denied: the agent's pts /dev/pts/0 is in a private devpts instance (dev 60, outside 24) 
+PASS  inherited-fds              denied: only stdio inherited (runtime: [4->anon_inode:[eventpoll] 5->anon_inode:[eventfd]]) 
+PASS  tiocsti-dev-tty            denied: TIOCSTI: operation not permitted 
+PASS  pid-namespace              denied: 6 processes visible, outside pid 30675 is not 
+PASS  environ-outside            denied: marker in no visible environ (6 processes visible) 
+PASS  ptrace-outside             denied: ptrace attach 30675: operation not permitted 
+PASS  ptrace-own-child           denied: ptrace own child: operation not permitted (seccomp) 
+PASS  vm-readv-outside           denied: process_vm_readv 30675: operation not permitted 
+PASS  vm-readv-own-child         denied: process_vm_readv 453: operation not permitted 
+PASS  proc-mem-outside           denied: open /proc/30675/mem: open /proc/30675/mem: no such file or directory 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+PASS  signal-outside             denied: kill -0 30675: no such process 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: operation not permitted 
+PASS  nested-userns-clone        denied: clone(CLONE_NEWUSER): fork/exec /bin/true: operation not permitted 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+PASS  unshare-command            denied: unshare: unshare failed: Operation not permitted 
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+PASS  sudo                       denied: sudo: /etc/sudo.conf is owned by uid 65534, should be 0 sudo: The "no new privileges" flag is set, which preve
+PASS  su                         denied: Password: su: Authentication failure 
+PASS  no-new-privs               denied: NoNewPrivs: 1 
+PASS  seccomp-filter             denied: Seccomp: 2 
+PASS  capabilities               denied: no capabilities held 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Read-only file system 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-70.scope/cgroup.procs: Directory nonexi
+PASS  cgroup-person-visible      denied:  
+PASS  keyctl                     denied: keyctl: operation not permitted 
+PASS  bpf                        denied: bpf: operation not permitted 
+PASS  perf-event-open            denied: perf_event_open: operation not permitted 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+PASS  io-uring                   denied: io_uring_setup: operation not permitted 
+PASS  core-limit                 denied: RLIMIT_CORE stays 0 (operation not permitted) 
+PASS  core-dump                  denied: no core file after a crash (signal: segmentation fault) 
+PASS  own-tty                    ok /dev/pts/0 
+PASS  ps                         ok     712 pts/0    00:00:00 timeout     713 pts/0    00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok 44d5ec8 work 
+PASS  dns                        ok 2606:4700:10::ac42:93f3 example.com 2606:4700:10::6814:179a example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.003s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Tue Nov  3 22:39:53 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+PASS  guard-untag                denied: cannot reach the guard: cotty-guard is not running 
+PASS  guard-register-again       denied: cannot reach the guard: cotty-guard is not running 
+PASS  guard-session-pts          the person's pts is not visible (private devpts instance)
+PASS  guard-cgroup-own-procs     denied: bash: line 1: /sys/fs/cgroup//cgroup.procs: Read-only file system 
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: /sys/fs/cgroup//../cgroup.procs: Permission denied 
+SKIP  guard-filecap-exec         no file capability binary found
+PASS  guard-proc-environ-all     no environ of a process outside the agent was readable
+PASS  outside-listeners          no connection reached any fake socket outside (8 listeners)
+PASS  home-write-persisted       files written to ~ inside stayed in the private tmpfs
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+PASS  own-scope                  the agent ran in cotty-agent-5945c645ee2e.scope
+PASS  core-files                 no core file in the project
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 94 pass, 0 fail, 3 skip (work dir /home/lab/cotty-matrix/20261103-223935)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+     23 "hook":"file_open"
+      3 "hook":"unix_stream_connect"
+loaded=true programs=11 agents=3 denials=116
+

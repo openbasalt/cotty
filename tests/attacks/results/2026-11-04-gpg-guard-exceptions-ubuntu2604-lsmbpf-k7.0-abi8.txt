@@ -1,0 +1,29 @@
+
+guard pts exception list, 7.0.0-38-generic, Ubuntu 26.04.1 LTS
+RES   CHECK                            DETAIL
+PASS  exc-status-lists                 the guard lists /usr/libexec/cotty-lab/fake-pinentry
+PASS  exc-listed-opens                 opened /dev/pts/1 and read 31 bytes 
+PASS  exc-listed-lock                  lock: LOCK fake-pinentry (exception)
+PASS  exc-listed-gets-keys             the program read the person's secret
+PASS  exc-listed-agent-input-refused   secret_input_active: a secret prompt is active; wait for secret_ended 
+PASS  exc-listed-agent-frozen          1 state event(s) while the secret prompt was active, 4 in total 
+PASS  exc-listed-agent-reads-secret    denied: marker absent from screen, scrollback and state (1419 bytes read) 
+PASS  exc-listed-logged                exception used: pid 8547 (fake-pinentry) running /usr/libexec/cotty-lab/fake-pinentry opened the session pts 1 (dev 0:27
+PASS  exc-listed-audited               guard.exception record with /usr/libexec/cotty-lab/fake-pinentry
+PASS  exc-listed-session-audit         the session audit log marks the prompt as an exception
+PASS  exc-unlisted                     denied: open /dev/pts/1: operation not permitted 
+PASS  exc-copy-user                    denied: open /dev/pts/1: operation not permitted 
+PASS  exc-copy-root                    denied: open /dev/pts/1: operation not permitted 
+PASS  exc-symlink                      ok: opened /dev/pts/1 and read 31 bytes 
+PASS  exc-agent-registered             denied: guardprobe: agent registered as agent:7046 (cgroup /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-exc8394a.scope) open 
+PASS  exc-agent-descendant             denied: guardprobe: agent registered as agent:7090 (cgroup /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-exc8394b.scope) open 
+PASS  exc-agent-tag-self               denied: guardprobe: agent registered as agent:17767946288620870580 (cgroup /user.slice/user-1000.slice/session-8.scope) guardprobe: note: no agent c
+PASS  exc-traced                       denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-group-writable        denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-refusal-logged        refusing /etc/cotty/guard-exceptions.conf: mode 0664 is writable by group or others (it must be a regular file owned by 
+PASS  exc-config-user-owned            denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-empty                 denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-absent                denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-reloaded              ok: opened /dev/pts/1 and read 31 bytes 
+
+summary: 24 pass, 0 fail, 0 gap (documented), 0 skip (work dir /home/lab/cotty-gexc/20261104-192956)

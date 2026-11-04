@@ -1,0 +1,57 @@
+vm-broker: cotty-r4i-ubuntu2604 is up (ssh port 2362)
+=== RUN   TestPrivateModeLastCommand
+--- PASS: TestPrivateModeLastCommand (1.76s)
+=== RUN   TestSecretPromptEvents
+--- PASS: TestSecretPromptEvents (2.93s)
+=== RUN   TestAttachRefusesFakeListener
+--- PASS: TestAttachRefusesFakeListener (1.67s)
+=== RUN   TestFakeLockPipeline
+--- PASS: TestFakeLockPipeline (5.27s)
+=== RUN   TestTypeaheadNotEchoed
+--- PASS: TestTypeaheadNotEchoed (1.05s)
+=== RUN   TestSecretPrompts
+=== RUN   TestSecretPrompts/sudo
+=== RUN   TestSecretPrompts/read_-s
+=== RUN   TestSecretPrompts/python_getpass
+=== RUN   TestSecretPrompts/openssl_passwd
+=== RUN   TestSecretPrompts/su
+=== RUN   TestSecretPrompts/passwd
+=== RUN   TestSecretPrompts/ssh
+--- PASS: TestSecretPrompts (9.42s)
+    --- PASS: TestSecretPrompts/sudo (0.45s)
+    --- PASS: TestSecretPrompts/read_-s (0.37s)
+    --- PASS: TestSecretPrompts/python_getpass (0.41s)
+    --- PASS: TestSecretPrompts/openssl_passwd (1.05s)
+    --- PASS: TestSecretPrompts/su (3.08s)
+    --- PASS: TestSecretPrompts/passwd (2.43s)
+    --- PASS: TestSecretPrompts/ssh (0.76s)
+=== RUN   TestZshReadSecret
+--- PASS: TestZshReadSecret (1.25s)
+=== RUN   TestRawModeNeverSecret
+=== RUN   TestRawModeNeverSecret/bash
+=== RUN   TestRawModeNeverSecret/zsh
+--- PASS: TestRawModeNeverSecret (15.37s)
+    --- PASS: TestRawModeNeverSecret/bash (11.81s)
+    --- PASS: TestRawModeNeverSecret/zsh (3.57s)
+=== RUN   TestSudoPwfeedbackDetected
+--- PASS: TestSudoPwfeedbackDetected (2.91s)
+=== RUN   TestPassthrough
+--- PASS: TestPassthrough (1.88s)
+=== RUN   TestArbitration
+--- PASS: TestArbitration (4.19s)
+=== RUN   TestConfirmPolicy
+--- PASS: TestConfirmPolicy (3.50s)
+=== RUN   TestPersonAdmission
+--- PASS: TestPersonAdmission (3.09s)
+=== RUN   TestNotShared
+--- PASS: TestNotShared (0.78s)
+=== RUN   TestLeakCheckWorks
+--- PASS: TestLeakCheckWorks (0.87s)
+=== RUN   TestSudoCommandsNotSecret
+--- PASS: TestSudoCommandsNotSecret (18.53s)
+=== RUN   TestSudoWrongPasswordRetry
+--- PASS: TestSudoWrongPasswordRetry (5.28s)
+=== RUN   TestSudoFromScriptDetected
+--- PASS: TestSudoFromScriptDetected (10.23s)
+PASS
+rc=0

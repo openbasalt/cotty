@@ -1,0 +1,45 @@
+# cotty-guard: kernel enforcement of cotty's agent rules (BPF LSM).
+# Optional: cotty works without it, at a lower assurance level. See
+# docs/guard.md.
+[Unit]
+Description=cotty guard (BPF LSM enforcement for AI agents)
+Documentation=https://github.com/openbasalt/cotty/blob/main/docs/guard.md
+# Without BTF the programs cannot load; the daemon also checks that the
+# bpf LSM is active and exits cleanly when it is not.
+ConditionPathExists=/sys/kernel/btf/vmlinux
+After=local-fs.target
+RequiresMountsFor=/sys/fs/bpf
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/cotty-guard run
+# Reloads the pts exception list (/etc/cotty/guard-exceptions.conf).
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=2
+# The daemon needs CAP_BPF, CAP_PERFMON and CAP_SYS_ADMIN (BPF LSM
+# programs), CAP_SYS_PTRACE (pidfds and /proc of other users' processes),
+# CAP_DAC_READ_SEARCH (cgroup tree walk).
+CapabilityBoundingSet=CAP_BPF CAP_PERFMON CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_DAC_READ_SEARCH CAP_DAC_OVERRIDE CAP_SYS_RESOURCE CAP_KILL
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/sys/fs/bpf /var/log/cotty /run/cotty-guard
+RuntimeDirectory=cotty-guard
+RuntimeDirectoryMode=0755
+# Kept across a stop: it holds the "enforcing" marker, which tells the
+# attach client to fail closed while the pinned programs enforce and the
+# daemon does not answer (cotty-guard uninstall removes it).
+RuntimeDirectoryPreserve=yes
+LogsDirectory=cotty
+LogsDirectoryMode=0700
+ProtectHome=yes
+PrivateTmp=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

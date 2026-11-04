@@ -1,0 +1,68 @@
+# AppArmor profiles for cotty on Ubuntu 24.04 and later (and other systems
+# with kernel.apparmor_restrict_unprivileged_userns = 1).
+#
+# Those systems let a program create unprivileged user namespaces only
+# when an AppArmor profile allows it. `cotty agent` needs them to give an
+# agent its own view of files, processes, terminals and sockets, the same
+# way bubblewrap does. The layout mirrors Ubuntu's bwrap-userns-restrict:
+#
+#   cotty         the installed binary: user namespaces and capabilities
+#                 inside them, otherwise unconfined (cotty's own layers,
+#                 Landlock, seccomp and namespaces, confine the agent);
+#   unpriv_cotty  the agent's profile: everything the agent runs keeps
+#                 it, which denies every capability, so an agent
+#                 that executes cotty (or bwrap, or unshare) again gets a
+#                 user namespace without any capability in it and cannot
+#                 build mounts of its own. This matters most where cotty
+#                 has no seccomp filter (architectures other than x86_64
+#                 and aarch64), which would otherwise deny nested
+#                 namespaces.
+#
+# The transition is not an exec rule here: the broker of a cotty session
+# also runs as cotty, and the shells it starts for the person must keep
+# their rights (sudo needs capabilities). cotty agent's exec stage asks for
+# it explicitly (aa_change_onexec, through /proc/self/attr/apparmor/exec)
+# right before it executes the agent, and refuses to start the agent when
+# it runs under the cotty profile and the change cannot be made. Leaving
+# the unconfined-mode cotty profile is allowed under no_new_privs. (A
+# stack, as bwrap-userns-restrict uses, keeps the cotty profile in the
+# label, and AppArmor 4.0 on Ubuntu 24.04 then denies the agent network
+# sockets.)
+#
+# Install (the package does this; by hand):
+#   sudo install -m 0644 dist/apparmor/cotty /etc/apparmor.d/cotty
+#   sudo apparmor_parser -r /etc/apparmor.d/cotty
+# `cotty doctor` reports whether user namespaces work afterwards.
+
+abi <abi/4.0>,
+
+include <tunables/global>
+
+profile cotty /usr/{,local/}bin/cotty flags=(unconfined) {
+  userns,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/cotty>
+}
+
+profile unpriv_cotty flags=(attach_disconnected,mediate_deleted) {
+  allow file rwlkm /{**,},
+  allow network,
+  allow unix,
+  allow ptrace,
+  allow signal,
+  allow mqueue,
+  allow io_uring,
+  allow userns,
+  allow mount,
+  allow umount,
+  allow pivot_root,
+  allow dbus,
+
+  # Everything the agent executes stays under this profile.
+  allow pix /** -> &unpriv_cotty,
+
+  audit deny capability,
+
+  include if exists <local/unpriv_cotty>
+}

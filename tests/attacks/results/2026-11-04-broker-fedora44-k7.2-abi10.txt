@@ -1,0 +1,69 @@
+cotty agent: profile generic, project /home/lab/cotty-bmatrix/20261104-031722/project, assurance confined (landlock ABI 10, cgroup cotty-agent-5f1631ea6db2.scope)
+
+broker escape matrix, guard not loaded, 7.2.15-200.fc44.x86_64, Fedora Linux 44 (Cloud Edition), landlock ABI 10
+u- rows: unconfined process of the same user (agent assurance weak); c- rows: under cotty agent (assurance confined)
+RES   CHECK                          DETAIL
+PASS  secret-prompt-seen             the person typed the secret at the lock
+PASS  secret-start-audited           the audit log has the secret prompt (start), never its content
+PASS  session-core-limit             session children have RLIMIT_CORE 0 (hard): core=0 hist=/home/lab/.local/state/cotty/sessions/bm11295/history
+PASS  session-histfile               HISTFILE is in the session state dir
+PASS  u-hello-person-main            denied: hello person refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binary
+PASS  u-hello-control-main           denied: hello control refused: role_denied: not classified as a person: no controlling terminal; executable "/home/lab/cotty/bin/probe" is not the cotty binar
+PASS  u-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  u-control-no-tty               denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-kill-no-tty                  denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-attach-fresh-pty             denied: cotty: approval_denied: the attached person did not approve 
+PASS  u-attach-needed-approval       the attach waited for the person, who denied it (0 -> 1 denials)
+PASS  u-systemd-run-pty-attach       denied: cotty: waiting for the attached person to approve (^] a in their client) | cotty: approval_denied: the attached person did not approve 
+PASS  u-systemd-run-needed-approval  systemd-run --user --pty attach waited for the person (1 -> 2 denials)
+PASS  u-systemd-run-control          denied: cotty: role_denied: not classified as a person: no controlling terminal 
+PASS  u-still-shared                 the session is still shared after the control attempts
+PASS  u-agent-reads-secret           denied: marker absent from screen, scrollback and state (1507 bytes read) 
+GAP   u-pts-by-path                  reachable (same uid opens its own pts; guard rule file_open): opened /dev/pts/1 read-write 
+GAP   u-pts-via-proc-fd              reachable (the session shell is dumpable; guard rule file_open): opened /proc/22204/fd/0 read-write 
+PASS  u-broker-fds                   denied: ls: cannot open directory '/proc/22194/fd': Permission denied 
+PASS  u-broker-environ               denied: open /proc/22194/environ: open /proc/22194/environ: permission denied 
+PASS  u-ptrace-broker                denied: ptrace attach 22194: operation not permitted 
+PASS  u-proc-mem-broker              denied: open /proc/22194/mem: open /proc/22194/mem: permission denied 
+PASS  u-vm-readv-broker              denied: process_vm_readv 22194: operation not permitted 
+PASS  u-ptrace-attach-client         denied: ptrace attach 22247: operation not permitted 
+PASS  u-proc-mem-attach-client       denied: open /proc/22247/mem: open /proc/22247/mem: permission denied 
+PASS  u-vm-readv-attach-client       denied: process_vm_readv 22247: operation not permitted 
+PASS  u-secret-in-audit-or-logs      searched 14 files (160 KiB of state), the secret is in none
+GAP   u-pts-pidfd-getfd              reachable (pidfd_getfd of the shell's fd 0 skips file_open; review S22): pidfd_getfd(22204, fd 0) gave a copy of /dev/pts/1 
+PASS  u-hello-agent-require-confined denied: hello agent refused: confinement_required: this session accepts only confined agents (--require-confined); start the agent with `cotty agent`: agent n
+PASS  c-agent-endpoint               ok hello agent granted: assurance confined (agent in its own namespaces or agent cgroup (layer 2), no guard) 
+PASS  c-agent-endpoint-require       ok hello agent granted: assurance confined (agent in its own namespaces or agent cgroup (layer 2), no guard) 
+PASS  c-hello-person-agentsock       denied: hello person refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-hello-control-agentsock      denied: hello control refused: role_denied: the agent endpoint only serves the agent and info roles 
+PASS  c-agent-dir-plant-socket       denied: open for writing /run/user/1000/cotty/agent/fake.sock: open /run/user/1000/cotty/agent/fake.sock: read-only file system 
+PASS  c-agent-reads-secret           denied: marker absent from screen, scrollback and state (1515 bytes read) 
+PASS  c-main-socket-visible          denied: /run/user/1000/cotty/bm11295.sock is not in the view 
+PASS  c-hello-person-main            denied: connect /run/user/1000/cotty/bm11295.sock: dial unix /run/user/1000/cotty/bm11295.sock: connect: no such file or directory 
+PASS  c-session-dir-listing          denied: ls: cannot access '/run/user/1000/cotty/bm11295.json': No such file or directory 
+PASS  c-attach-fresh-pty             denied: cotty: no session "bm11295" 
+PASS  c-systemd-run-attach           denied: Failed to connect to user scope bus via local transport: No such file or directory 
+PASS  c-admission-not-visible        denied: no code prompt (0 guesses typed): cotty: no session "bm11295" 
+PASS  c-pts-by-path                  denied: open /dev/pts/1: no such file or directory 
+PASS  c-pts-via-proc-fd              denied: open /proc/22204/fd/0: no such file or directory 
+PASS  c-ptrace-broker                denied: ptrace attach 22194: operation not permitted 
+PASS  c-proc-mem-broker              denied: open /proc/22194/mem: open /proc/22194/mem: no such file or directory 
+PASS  c-vm-readv-broker              denied: process_vm_readv 22194: operation not permitted 
+PASS  c-ptrace-attach-client         denied: ptrace attach 22247: operation not permitted 
+PASS  c-proc-mem-attach-client       denied: open /proc/22247/mem: open /proc/22247/mem: no such file or directory 
+PASS  c-pts-pidfd-getfd              denied: pidfd_open 22204: no such process 
+PASS  c-read-audit                   denied: open /home/lab/.local/state/cotty/audit.jsonl: open /home/lab/.local/state/cotty/audit.jsonl: no such file or directory 
+PASS  c-read-broker-log              denied: open /run/user/1000/cotty/bm11295.log: open /run/user/1000/cotty/bm11295.log: no such file or directory 
+PASS  c-read-history                 denied: open /home/lab/.local/state/cotty/sessions/bm11295/history: open /home/lab/.local/state/cotty/sessions/bm11295/history: no such file or dire
+PASS  c-inside-completed             broker-inside.sh ran to the end (cotty agent exit 0)
+FAIL  u-private-mode-last-command    [open: B1] ESCAPED: the marker is in what the agent reads 
+FAIL  u-state-events-during-secret   [open: B2] ESCAPED: 30 state events while the secret prompt was active (28 with person_typing): the agent sees each keystroke 
+FAIL  u-fake-lock-pipeline           [open: B6] the lock showed "LOCK sleep" while python3 read the keys (it captured 28 chars)
+PASS  person-detached                the person detached and noted the new code
+PASS  u-reattach-code-brute          denied: 5 guesses in 0.3s, 4 answered wrong code, rate limit reached 1 times; code space 32^10 (2^50), 3 guesses per 30 s 
+FAIL  person-not-locked-out          [open: S4] the guesses locked the real person out too: attach-failed No person is attached to approve. Reattach code (shown at detach): | cotty: rate_limit
+PASS  person-reattach                the person reattaches with the real code after the guesses
+GAP   u-session-socket-replace       a process of the user can rename and replace the session socket (same uid)
+FAIL  u-attach-trusts-fake-socket    [open: B3] ESCAPED: a person client sent its reattach code to a fake socket 
+
+summary: 53 pass, 5 fail (5 of them open review items), 4 gap (documented, guard needed), 0 skip (work dir /home/lab/cotty-bmatrix/20261104-031722)

@@ -1,0 +1,120 @@
+mode: none
+cotty agent (unconfined baseline): no layer 2, not registered
+
+escape matrix, 7.0.0-38-generic, Ubuntu 26.04.1 LTS, landlock ABI 8
+RES   CHECK                      DETAIL
+FAIL  read-ssh-key               ESCAPED:  
+FAIL  ssh-dir-visible            ESCAPED:  
+FAIL  shell-history              ESCAPED:  
+PASS  home-via-proc-root         denied: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: open /proc/1/root/home/lab/.ssh/cotty_lab_fake: permission den
+FAIL  home-via-self-root         ESCAPED: read /proc/self/root/home/lab/.ssh/cotty_lab_fake 
+PASS  umount-home-tmpfs          denied: umount /home/lab: operation not permitted 
+FAIL  landlock-read-boot         ESCAPED: read /boot/config-7.0.0-38-generic 
+PASS  read-root-home             denied: ls: cannot open directory '/root': Permission denied 
+PASS  write-etc                  denied: open for writing /etc/cotty-lab-escape: open /etc/cotty-lab-escape: permission denied 
+FAIL  write-git-hook             ESCAPED: opened /home/lab/cotty-matrix/20261104-031645/project/.git/hooks/pre-commit for writing 
+FAIL  write-git-config           ESCAPED: opened /home/lab/cotty-matrix/20261104-031645/project/.git/config for writing 
+FAIL  dbus-session-path          ESCAPED: connected to /run/user/1000/bus 
+PASS  dbus-secret-service        denied: Call failed: The name org.freedesktop.secrets was not provided by any .service files 
+FAIL  dbus-fake-path             ESCAPED: connected to /run/user/1000/cotty-lab/bus 
+FAIL  dbus-abstract              ESCAPED: connected to @/tmp/dbus-cottylab 
+FAIL  systemd-private            ESCAPED: connected to /run/user/1000/systemd/private 
+FAIL  systemd-run-scope          ESCAPED: Running as unit: run-p19594-i17362.scope; invocation ID: dc8899d55ce84de49085637c6c4a787a 
+FAIL  systemd-run-shell          ESCAPED:  
+FAIL  systemctl-user             ESCAPED: HOME=/home/lab LANG=C.UTF-8 LOGNAME=lab PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr
+FAIL  system-bus                 ESCAPED: connected to /run/dbus/system_bus_socket 
+FAIL  ssh-agent-real             ESCAPED: connected to /run/user/1000/cotty-lab/real-ssh-agent.sock 
+PASS  ssh-add                    denied: The agent has no identities. 
+FAIL  ssh-agent-fake             ESCAPED: connected to /run/user/1000/cotty-lab/ssh-agent.sock 
+FAIL  gpg-agent                  ESCAPED: connected to /run/user/1000/gnupg/S.gpg-agent 
+SKIP  docker-socket              target not present on this host
+FAIL  landlock-resolve-unix      ESCAPED: connected to /home/lab/cotty-matrix/20261104-031645/project/outside.sock 
+FAIL  tmux-socket                ESCAPED: connected to /tmp/tmux-1000/cottylab 
+FAIL  tmux-capture-pane          ESCAPED:  
+FAIL  screen-socket              ESCAPED: connected to /run/screen/S-lab/19363.cottylab 
+FAIL  screen-hardcopy            ESCAPED:  
+FAIL  kitty-path                 ESCAPED: connected to /tmp/kitty-cottylab 
+FAIL  kitty-abstract             ESCAPED: connected to @kitty-cottylab 
+FAIL  wezterm                    ESCAPED: connected to /run/user/1000/wezterm/gui-sock-cottylab 
+FAIL  x11-path                   ESCAPED: connected to /tmp/.X11-unix/X42 
+FAIL  x11-abstract               ESCAPED: connected to @/tmp/.X11-unix/X42 
+FAIL  other-pts                  ESCAPED: opened [/dev/pts/0 /dev/pts/1 /dev/pts/2] (own not a tty) 
+SKIP  own-devpts-instance        no controlling terminal 
+FAIL  inherited-fds              ESCAPED: inherited descriptors: [5->/dev/pts/0] 
+PASS  tiocsti-dev-tty            denied: open /dev/tty: no such device or address 
+FAIL  pid-namespace              ESCAPED: outside pid 19425 is visible 
+FAIL  environ-outside            ESCAPED: marker found in /proc/19336/environ 
+PASS  ptrace-outside             denied: ptrace attach 19425: operation not permitted 
+FAIL  ptrace-own-child           ESCAPED: attached to own child 19857 
+PASS  vm-readv-outside           denied: process_vm_readv 19425: operation not permitted 
+FAIL  vm-readv-own-child         ESCAPED: read 16 bytes of 19883 
+PASS  proc-mem-outside           denied: open /proc/19425/mem: open /proc/19425/mem: permission denied 
+PASS  proc-mem-init              denied: open /proc/1/mem: open /proc/1/mem: permission denied 
+FAIL  signal-outside             ESCAPED: signal 0 delivered to 19425 
+PASS  signal-init                denied: kill -0 1: operation not permitted 
+PASS  nested-userns-unshare      denied: unshare user: invalid argument 
+FAIL  nested-userns-clone        ESCAPED: started a process in a new user namespace 
+PASS  nested-mountns             denied: unshare mount: operation not permitted 
+PASS  unshare-command            denied: unshare: write failed /proc/self/uid_map: Operation not permitted 
+PASS  mount-tmpfs                denied: mount: operation not permitted 
+FAIL  sudo                       ESCAPED:  
+PASS  su                         denied: Password: su: Authentication failure 
+FAIL  no-new-privs               ESCAPED: NoNewPrivs: 0, want 1 
+FAIL  seccomp-filter             ESCAPED: Seccomp: 0, want 2 
+FAIL  capabilities               ESCAPED: CapBnd is 000001ffffffffff 
+PASS  cgroup-procs-own           denied: sh: 1: cannot create /sys/fs/cgroup/cgroup.procs: Permission denied 
+PASS  cgroup-procs-person        denied: sh: 1: cannot create /sys/fs/cgroup/user.slice/user-1000.slice/session-24.scope/cgroup.procs: Permission denie
+FAIL  cgroup-person-visible      ESCAPED:  
+FAIL  keyctl                     ESCAPED: keyctl reached the user keyring 
+FAIL  bpf                        ESCAPED: bpf reached the kernel (invalid argument), not blocked by the filter 
+FAIL  perf-event-open            ESCAPED: perf_event_open reached the kernel (permission denied), not blocked by the filter 
+PASS  userfaultfd                denied: userfaultfd: operation not permitted 
+FAIL  io-uring                   ESCAPED: io_uring_setup reached the kernel (bad address), not blocked by the filter 
+FAIL  core-limit                 ESCAPED: raised RLIMIT_CORE to unlimited 
+PASS  core-dump                  denied: no core file after a crash (signal: segmentation fault (core dumped)) 
+FAIL  own-tty                    exit 1:  
+PASS  ps                         ok   20166 ?        00:00:00 timeout   20167 ?        00:00:00 ps 
+PASS  write-home-tmpfs           ok  
+PASS  runtime-dir-write          ok  
+PASS  git-commit                 ok 04d1da8 work 
+PASS  dns                        ok 2606:4700:10::6814:179a example.com 2606:4700:10::ac42:93f3 example.com 
+PASS  https                      ok  
+PASS  c-build-run                ok  
+PASS  go-build-test              ok ok  	lab	0.006s 
+PASS  python-venv-pip            ok  
+PASS  python-unittest            ok  OK 
+PASS  npm-install-test           ok  
+PASS  own-tmux                   ok 0: 1 windows (created Wed Nov  4 03:16:59 2026) 
+PASS  make-available             ok This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitt
+PASS  own-unix-socket            ok  
+FAIL  git-dir-rename-hook        ESCAPED: planted .git/hooks/post-checkout 
+FAIL  git-nested-repo-hook       ESCAPED: planted nested/.git/hooks/post-checkout 
+PASS  relay-escapes-sent         OSC 52 and kitty remote control printed; see relay-osc52 and relay-kitty-rc outside
+SKIP  guard-untag                the guard is not running in mode none
+FAIL  guard-session-pts          ESCAPED: opened /dev/pts/0 for writing 
+PASS  guard-pts-pidfd-getfd      denied: pidfd_getfd on 19337: operation not permitted 
+FAIL  guard-cgroup-own-procs     ESCAPED:  
+PASS  guard-cgroup-parent-procs  denied: bash: line 1: echo: write error: Device or resource busy 
+FAIL  guard-filecap-exec         ESCAPED: /usr/bin/ping ran with file capabilities (exit 2)
+FAIL  guard-proc-environ-all     ESCAPED: 16 environ files outside the agent were readable
+FAIL  guard-clone-into-cgroup    ESCAPED: a child started in /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim-19415.service, out
+FAIL  guard-cgroup-freeze        ESCAPED: froze and thawed /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim-19415.
+FAIL  guard-cgroup-kill          ESCAPED: killed every process in /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/cotty-lab-victim
+FAIL  guard-prlimit-outside      ESCAPED: changed RLIMIT_CORE of pid 19425 
+FAIL  guard-sigio-kill           ESCAPED: pid 19425 killed by SIGIO (SIGKILL) 
+FAIL  guard-socket-rename-allowed ESCAPED: connected to /run/user/1000/cotty/lab-renamed.sock 
+SKIP  guard-register-again       the guard is not running in mode none
+FAIL  outside-listeners          2026-11-04T03:16:46Z connection on /run/user/1000/cotty-lab/bus;2026-11-04T03:16:46Z connection on @/tmp/dbus-cottylab;2026-11-04T03:16:46Z connection on /run/user/1000/cotty-lab/ssh-agent.sock;2026-11-04T03:16:46Z connection on /tmp/kitty-cottylab;2026-11-04T03:16:46Z connection on @kitty-cottylab;2026-11-04T03:16:46Z connection on /run/user/1000/wezterm/gui-sock-cottylab;2026-11-04T03:16:46Z connection on /tmp/.X11-unix/X42;2026-11-04T03:16:46Z connection on @/tmp/.X11-unix/X42;
+FAIL  home-write-persisted       a file written to ~ inside reached the real home
+PASS  git-hook-unchanged         the project's pre-commit hook is unchanged
+FAIL  git-dir-unchanged          .git was replaced (inode 561418 -> 753692) or a hook added (post-checkout: present)
+SKIP  relay-osc52                no cotty agent, no relay
+SKIP  relay-kitty-rc             no cotty agent, no relay
+PASS  own-scope                  the agent ran in 
+PASS  core-files                 no core file in the project
+PASS  inside-completed           inside.sh ran to the end (cotty agent exit 0)
+
+summary: 42 pass, 62 fail (0 of them open review items), 0 gap (documented), 6 skip (work dir /home/lab/cotty-matrix/20261104-031645)
+
+guard denials during the run (audit log /var/log/cotty/guard.audit.jsonl, by hook):
+cotty-guard is not running

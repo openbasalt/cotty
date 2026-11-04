@@ -1,0 +1,34 @@
+
+guard pts exception list, 6.19.10-300.fc44.x86_64, Fedora Linux 44 (Cloud Edition)
+RES   CHECK                            DETAIL
+PASS  exc-status-lists                 the guard lists /usr/libexec/cotty-lab/fake-pinentry
+PASS  exc-listed-opens                 opened /dev/pts/1 and read 30 bytes 
+PASS  exc-listed-lock                  lock: LOCK fake-pinentry (exception, for bash)
+PASS  exc-listed-gets-keys             the program read the person's secret
+PASS  exc-listed-agent-input-refused   secret_input_active: a secret prompt is active; wait for secret_ended 
+PASS  exc-listed-agent-frozen          1 state event(s) while the secret prompt was active, 4 in total 
+PASS  exc-listed-agent-reads-secret    denied: marker absent from screen, scrollback and state (1377 bytes read) 
+PASS  exc-listed-logged                exception used: pid 7178 (fake-pinentry) running /usr/libexec/cotty-lab/fake-pinentry opened the session pts 1 (dev 0:26
+PASS  exc-listed-audited               guard.exception record with /usr/libexec/cotty-lab/fake-pinentry
+PASS  exc-listed-session-audit         the session audit log marks the prompt as an exception
+PASS  exc-unlisted                     denied: open /dev/pts/1: operation not permitted 
+PASS  exc-copy-user                    denied: open /dev/pts/1: operation not permitted 
+PASS  exc-copy-root                    denied: open /dev/pts/1: operation not permitted 
+PASS  exc-symlink                      ok: opened /dev/pts/1 and read 30 bytes 
+PASS  exc-agent-registered             denied: guardprobe: agent registered as agent:7811 (cgroup /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-exc7027a.scope) open 
+PASS  exc-agent-descendant             denied: guardprobe: agent registered as agent:7856 (cgroup /user.slice/user-1000.slice/user@1000.service/app.slice/cotty-agent-exc7027b.scope) open 
+PASS  exc-agent-tag-self               denied: guardprobe: agent registered as agent:13606672637860043070 (cgroup /user.slice/user-1000.slice/session-34.scope) guardprobe: note: no agent 
+PASS  exc-traced                       denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-group-writable        denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-refusal-logged        refusing /etc/cotty/guard-exceptions.conf: mode 0664 is writable by group or others (it must be a regular file owned by 
+PASS  exc-config-user-owned            denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-empty                 denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-absent                denied: open /dev/pts/1: operation not permitted 
+PASS  exc-config-reloaded              ok: opened /dev/pts/1 and read 30 bytes 
+PASS  exc-daemon-stopped               denied: open /dev/pts/1: operation not permitted 
+PASS  exc-daemon-restarted             ok: opened /dev/pts/1 and read 30 bytes 
+PASS  exc-daemon-killed-fresh          ok: opened /dev/pts/1 and read 29 bytes 
+PASS  exc-daemon-killed-stale          denied: open /dev/pts/1: operation not permitted 
+PASS  exc-daemon-killed-restarted      ok: opened /dev/pts/1 and read 1 bytes 
+
+summary: 29 pass, 0 fail, 0 gap (documented), 0 skip (work dir /home/lab/cotty-gexc/20261104-210357)

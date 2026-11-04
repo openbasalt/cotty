@@ -1,0 +1,49 @@
+PASS  file-bind-rename-fails         rename onto a bound file fails as expected (exit 4: mv: cannot move '/home/lab/.cotty-lab-bound.json.tmp.7.1793821663805240823' to '/home/lab/.cotty-lab-bound.json': Device or resource busy)
+PASS  claude-config-dir              CLAUDE_CONFIG_DIR=~/.claude, settings seeded from ~/.claude.json
+PASS  claude-home-json-hidden        ~/.claude.json (which can define MCP servers) is not visible inside
+PASS  claude-rename-save             the rename save inside reached ~/.claude/.claude.json outside
+PASS  claude-seed-sanitized          the seeded copy has no MCP servers and no keys
+PASS  claude-home-json-unchanged     ~/.claude.json outside is unchanged
+PASS  claude-settings-missing        a missing ~/.claude/settings.json cannot be created inside (left as {} outside)
+PASS  claude-settings-protected      ~/.claude/settings.json cannot be replaced inside
+PASS  claude-protect-around          denied inside: mv /home/lab/.claude/agents /home/lab/.claude/agents.old
+PASS  claude-protect-around          denied inside: mv /home/lab/.claude /home/lab/.claude.old
+PASS  claude-protect-around          denied inside: mv /home/lab/.claude/settings.json /home/lab/.claude/s.old
+PASS  claude-protect-around          denied inside: mkdir -p /home/lab/.claude/agents/x
+PASS  claude-protect-around          denied inside: touch /home/lab/.claude/hooks/h.sh
+PASS  claude-protect-around          denied inside: touch /home/lab/.claude/CLAUDE.md
+PASS  claude-hook-script             the status line and hook script named by settings.json is read-only inside
+PASS  claude-settings-local          refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/settings.local.json: Read-only file syste
+PASS  claude-plugins-dir             refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/plugins/planted/hooks/hooks.json: Read-on
+PASS  claude-skills-dir              refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/skills/planted/SKILL.md: Read-only file s
+PASS  codex-rules                    refused inside (exit 2): sh: 1: cannot create /home/lab/.codex/rules/planted.rules: Read-only file system
+PASS  gemini-extension               refused inside (exit 2): sh: 1: cannot create /home/lab/.gemini/extensions/planted/gemini-extension.json:
+PASS  opencode-lsp-bin               refused inside (exit 2): sh: 1: cannot create /home/lab/.local/share/opencode/bin/planted: Read-only file
+PASS  claude-agents-dir              refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/agents/planted.md: Read-only file system
+PASS  claude-commands-dir            refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/commands/planted.md: Read-only file syste
+PASS  claude-md                      refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/CLAUDE.md: Read-only file system
+PASS  codex-config-missing           refused inside (exit 2): sh: 1: cannot create /home/lab/.codex/config.toml: Read-only file system
+PASS  gemini-settings-missing        refused inside (exit 2): sh: 1: cannot create /home/lab/.gemini/settings.json: Read-only file system
+PASS  cursor-mcp-missing             refused inside (exit 2): sh: 1: cannot create /home/lab/.cursor/mcp.json: Read-only file system
+PASS  cursor-hooks                   refused inside (exit 2): sh: 1: cannot create /home/lab/.cursor/hooks.json: Read-only file system
+PASS  opencode-config-missing        refused inside (exit 2): sh: 1: cannot create /home/lab/.config/opencode/opencode.json: Read-only file sy
+PASS  opencode-plugin                refused inside (exit 2): sh: 1: cannot create /home/lab/.config/opencode/plugin/planted.js: Read-only fil
+PASS  claude-local-install           refused inside (exit 2): sh: 1: cannot create /home/lab/.claude/local/claude: Read-only file system
+PASS  cursor-extensions              refused inside (exit 2): sh: 1: cannot create /home/lab/.cursor/extensions/planted/package.json: Read-onl
+PASS  cursor-argv                    refused inside (exit 2): sh: 1: cannot create /home/lab/.cursor/argv.json: Read-only file system
+PASS  home-link-protect              refused: cotty agent: ~/.claude/local is a link to a place no agent may see; remove it before starting an age
+PASS  home-link-ro                   the link's target is not bound (exit 1)
+PASS  claude-ide-lock-hidden         ~/.claude/ide is empty inside and planted locks stay inside
+PASS  claude-ide-show-hidden         --show-hidden leaves ~/.claude/ide visible
+PASS  dotfiles-link-protect          denied: printf '{"hooks":"planted"}' >~/.claude/settings.json
+PASS  dotfiles-link-protect          denied: printf '{"hooks":"planted"}' >~/cotty-claude-config/20261104-194743/dotfiles/claude/settings.json
+PASS  dotfiles-link-protect          denied: rm -f ~/.claude/settings.json && echo planted >~/.claude/settings.json
+PASS  dotfiles-link-protect          denied: echo planted >~/.claude/s.new && mv -f ~/.claude/s.new ~/.claude/settings.json
+PASS  dotfiles-link-readable         the linked settings file reads as usual inside
+PASS  dotfiles-link-sibling          the target in ~/.claude of a protected link is read-only inside
+PASS  dotfiles-link-dir-refused      refused: cotty agent: ~/.claude/skills is a link to a directory (/home/lab/cotty-claude-config/2026
+PASS  claude-dir-link-hide           ~/.claude/ide is hidden through the ~/.claude link (project ~/cotty-claude-config/20261104-194743/dotfiles)
+PASS  claude-dir-link-protect        settings.json below the ~/.claude link stays read-only (project ~/cotty-claude-config/20261104-194743/dotfiles)
+PASS  claude-dir-link-hide           ~/.claude/ide is hidden through the ~/.claude link (project ~/cotty-claude-config/20261104-194743/project)
+PASS  claude-dir-link-protect        settings.json below the ~/.claude link stays read-only (project ~/cotty-claude-config/20261104-194743/project)
+PASS  claude-dir-link-skipped        nothing created in ~/.ssh through a ~/.claude link to it

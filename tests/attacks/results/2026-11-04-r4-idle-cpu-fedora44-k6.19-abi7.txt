@@ -1,0 +1,7 @@
+processes: 154
+main: broker 38482 cpu 386 ticks in 60s = 6.43% of one core
+r4: broker 38541 cpu 35 ticks in 60s = 0.58% of one core
+processes: 950
+main: broker 39404 cpu 2274 ticks in 60s = 37.90% of one core
+r4: broker 39462 cpu 69 ticks in 60s = 1.15% of one core
+ALLDONE
