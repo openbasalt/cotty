@@ -28,6 +28,7 @@ func runDoctor(args []string) int {
 	r := confine.Doctor()
 	r.Checks = append(r.Checks, sessionChecks()...)
 	r.Checks = append(r.Checks, guardCheck())
+	r.Sessions, r.SessionsNote = sessionsSummary(r.Assurance, r.Checks)
 	if *asJSON {
 		return printJSON(r)
 	}
@@ -37,14 +38,44 @@ func runDoctor(args []string) int {
 			fmt.Printf("%s\n", indent(wrap(c.Explain, 70), "                "))
 		}
 	}
-	fmt.Printf("\nassurance for `cotty agent`: %s\n", r.Assurance)
+	fmt.Printf("\nassurance for `cotty agent` (layer 2): %s\n", r.Assurance)
 	for _, g := range r.Gaps {
 		fmt.Printf("%s\n", indent(wrap("- "+g, 70), "  "))
+	}
+	fmt.Printf("\nassurance for new sessions: %s\n", r.Sessions)
+	if r.SessionsNote != "" {
+		fmt.Printf("%s\n", indent(wrap(r.SessionsNote, 70), "  "))
 	}
 	if r.Assurance == "unavailable" {
 		return 1
 	}
 	return 0
+}
+
+// sessionsSummary says which assurance a session created now can reach,
+// from the layer 2 level and the binary and guard checks: strong needs
+// layer 2, a trusted binary and a running guard (peer.Classifier). A
+// session keeps the level it got at its start: one created before the
+// guard started stays below strong (guard.Session treats it as a lapse).
+func sessionsSummary(layer2 string, checks []confine.Check) (string, string) {
+	status := map[string]string{}
+	for _, c := range checks {
+		status[c.Name] = c.Status
+	}
+	guardRunning := status["guard"] == "ok"
+	switch {
+	case layer2 == "unavailable":
+		return "unavailable (cotty agent cannot start here)", ""
+	case status["binary"] == "warn":
+		return "weak (the cotty binary can be replaced by your user)", "Sessions report weak until cotty is installed root-owned (see the binary line above)."
+	case guardRunning:
+		return "strong available for new sessions (cotty-guard running)",
+			"Sessions created before cotty-guard started stay at their level (confined); start a new session to get strong."
+	case status["guard"] == "warn":
+		return "confined (cotty-guard not answering)", "Sessions are not strong while cotty-guard does not answer."
+	}
+	return "confined (cotty-guard not running)",
+		"Sessions created before cotty-guard starts stay confined; only sessions created after it starts can reach strong."
 }
 
 // sessionChecks report what the session side (broker, masking list)

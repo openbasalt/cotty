@@ -217,7 +217,16 @@ func WriteMsg(fd int, v any, fds []int) error {
 	if len(fds) > 0 {
 		oob = unix.UnixRights(fds...)
 	}
-	return unix.Sendmsg(fd, b, oob, nil, 0)
+	for {
+		err := unix.Sendmsg(fd, b, oob, nil, 0)
+		if err != unix.EINTR {
+			return err
+		}
+		// A socket with SO_SNDTIMEO (the client's) returns EINTR when a
+		// signal arrives, even with SA_RESTART (signal(7)); the Go runtime
+		// sends SIGURG to preempt goroutines. A SOCK_SEQPACKET message is
+		// sent whole or not at all, so sending it again is safe.
+	}
 }
 
 // ReadMsg reads one JSON message and the descriptors that came with it.
@@ -226,6 +235,11 @@ func ReadMsg(fd int, v any) ([]int, error) {
 	buf := make([]byte, maxRequest)
 	oob := make([]byte, unix.CmsgSpace(4*maxRequestFDs))
 	n, oobn, flags, _, err := unix.Recvmsg(fd, buf, oob, unix.MSG_CMSG_CLOEXEC)
+	for err == unix.EINTR {
+		// Interrupted before a message was taken (see WriteMsg): read
+		// again. Each retry restarts the SO_RCVTIMEO timeout.
+		n, oobn, flags, _, err = unix.Recvmsg(fd, buf, oob, unix.MSG_CMSG_CLOEXEC)
+	}
 	if err != nil {
 		return nil, err
 	}

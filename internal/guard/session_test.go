@@ -23,6 +23,12 @@ type fakeDaemon struct {
 	protected bool
 	protects  int
 	silent    bool // read requests, never answer (a stuck daemon)
+	stopped   bool
+	// wg counts serve and the connection goroutines. stop waits for them
+	// before closing any descriptor: a goroutine still using a closed
+	// descriptor number would read from whatever reuses it next (the
+	// next test's daemon socket) and answer for the wrong fake.
+	wg sync.WaitGroup
 }
 
 func startFake(t *testing.T, path string, protected bool) *fakeDaemon {
@@ -39,20 +45,32 @@ func startFake(t *testing.T, path string, protected bool) *fakeDaemon {
 		t.Fatal(err)
 	}
 	f := &fakeDaemon{t: t, path: path, lfd: fd, protected: protected}
+	f.wg.Add(1)
 	go f.serve()
 	return f
 }
 
 func (f *fakeDaemon) serve() {
+	defer f.wg.Done()
 	for {
 		c, _, err := unix.Accept4(f.lfd, unix.SOCK_CLOEXEC)
+		if err == unix.EINTR {
+			continue
+		}
 		if err != nil {
 			return
 		}
 		f.mu.Lock()
+		if f.stopped {
+			f.mu.Unlock()
+			_ = unix.Close(c)
+			return
+		}
 		f.conns = append(f.conns, c)
+		f.wg.Add(1)
 		f.mu.Unlock()
 		go func(c int) {
+			defer f.wg.Done()
 			for {
 				var req Request
 				fds, err := ReadMsg(c, &req)
@@ -85,16 +103,23 @@ func (f *fakeDaemon) serve() {
 }
 
 // stop closes the listener and every connection: a daemon restart.
+// Shutdown wakes the goroutines blocked in accept or recvmsg; the
+// descriptors are closed only once they have all returned.
 func (f *fakeDaemon) stop() {
 	f.mu.Lock()
-	defer f.mu.Unlock()
+	f.stopped = true
 	_ = unix.Shutdown(f.lfd, unix.SHUT_RDWR)
-	_ = unix.Close(f.lfd)
-	for _, c := range f.conns {
+	conns := f.conns
+	f.conns = nil
+	for _, c := range conns {
 		_ = unix.Shutdown(c, unix.SHUT_RDWR)
+	}
+	f.mu.Unlock()
+	f.wg.Wait()
+	_ = unix.Close(f.lfd)
+	for _, c := range conns {
 		_ = unix.Close(c)
 	}
-	f.conns = nil
 	_ = os.Remove(f.path)
 }
 
@@ -178,13 +203,21 @@ func TestSessionLapseIsPermanent(t *testing.T) {
 	defer c.Close()
 	d.set(false)
 	waitFor(t, "lapse detected", func() bool { return !s.Loaded() })
-	d.mu.Lock()
-	n := d.protects
-	d.mu.Unlock()
-	if n < 2 {
-		t.Fatalf("the session did not protect the pts again (%d protect requests)", n)
-	}
-	time.Sleep(100 * time.Millisecond)
+	// check marks the lapse before it sends the new protect request, so
+	// the request may not have reached the daemon yet: wait for it rather
+	// than reading the count right away.
+	waitFor(t, "the pts protected again", func() bool {
+		d.mu.Lock()
+		defer d.mu.Unlock()
+		return d.protects >= 2
+	})
+	// Wait for a later check that the daemon confirms (the fake keeps the
+	// new protection): even then the session must not be strong.
+	waitFor(t, "the new protection confirmed", func() bool {
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		return s.confirmed
+	})
 	if s.Loaded() {
 		t.Fatal("strong again after a lapse")
 	}
