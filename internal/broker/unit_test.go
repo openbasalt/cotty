@@ -52,7 +52,7 @@ func TestKeys(t *testing.T) {
 }
 
 func TestConfirmText(t *testing.T) {
-	for _, s := range []string{"ls -la\r", "x\x7f", "git commit -m 'café'", "[ $a != b ]", "if ! true; then :; fi", "echo $((1 + 2))"} {
+	for _, s := range []string{"ls -la\r", "x\x7f", "git commit -m 'café'", "[ $a = b ] || echo differ", "echo $((1 + 2))"} {
 		if !confirmTextOK(s, true) {
 			t.Errorf("%q refused under confirm", s)
 		}
@@ -62,6 +62,11 @@ func TestConfirmText(t *testing.T) {
 		"./configure --\t", "make \t",
 		// History expansion draws earlier commands, private ones too (COT-3).
 		"echo !!", "!-1 ", "echo !?TOKEN?", "!$", "echo hi!", "^e^e ", "x^y",
+		// Every '!', even one a shell would not expand where it stands: the
+		// editing keys the agent keeps (Left, Backspace, more text) can
+		// turn "! " or "!=" into a history reference that magic-space then
+		// expands without an Enter.
+		"[ $a != b ]", "if ! true; then :; fi", "echo ! ", "echo !=", "!(x)", "echo '!'",
 	} {
 		if confirmTextOK(s, true) {
 			t.Errorf("%q allowed under confirm", s)
