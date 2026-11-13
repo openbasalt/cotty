@@ -90,26 +90,29 @@ func TestClassify(t *testing.T) {
 			t.Errorf("%s: no failed check reported", name)
 		}
 	}
-	// Agent assurance.
-	in := person()
-	in.UserNS = "user:[9]"
-	if v := c.Classify(in); v.Assurance != proto.AssuranceConfined {
-		t.Errorf("namespaced agent: %+v", v)
+	// Agent assurance: properties any process can give itself prove
+	// nothing (review COT-2); TestLaunch covers the verified cases.
+	for name, mut := range map[string]func(*Info){
+		"own user ns (unshare -U)": func(i *Info) { i.UserNS = "user:[9]" },
+		"own user and pid ns":      func(i *Info) { i.UserNS, i.PidNS = "user:[9]", "pid:[9]" },
+		"agent cgroup it made":     func(i *Info) { i.Cgroup = "/user.slice/cotty-agent-x" },
+		"pid not visible":          func(i *Info) { i.PID = 0 },
+		"plain agent":              func(i *Info) { i.Exe = "/usr/bin/claude" },
+	} {
+		in := person()
+		mut(&in)
+		if v := c.Classify(in); v.Person || v.Assurance != proto.AssuranceWeak {
+			t.Errorf("%s: %+v", name, v)
+		}
 	}
-	in = person()
-	in.Exe = "/usr/bin/claude"
-	if v := c.Classify(in); v.Assurance != proto.AssuranceWeak {
-		t.Errorf("plain agent: %+v", v)
-	}
+	// A guard tag (tag-self) never raises an agent on its own.
 	c.Guard = fakeGuard{tags: map[int]string{500: "agent:7"}}
-	// Tagged but without layer 2 (guard-only): not strong (review N21).
-	if v := c.Classify(person()); v.Person || v.Assurance != proto.AssuranceConfined {
-		t.Errorf("tagged agent without layer 2: %+v", v)
-	}
-	in = person()
-	in.UserNS = "user:[9]"
-	if v := c.Classify(in); v.Person || v.Assurance != proto.AssuranceStrong {
-		t.Errorf("tagged agent with layer 2: %+v", v)
+	for _, mut := range []func(*Info){func(*Info) {}, func(i *Info) { i.UserNS, i.PidNS = "user:[9]", "pid:[9]" }} {
+		in := person()
+		mut(&in)
+		if v := c.Classify(in); v.Person || v.Assurance != proto.AssuranceWeak {
+			t.Errorf("self-tagged agent: %+v", v)
+		}
 	}
 	// A cotty binary the user can replace makes persons weak.
 	c = classifier()
@@ -120,7 +123,7 @@ func TestClassify(t *testing.T) {
 	// Insecure mode.
 	c = classifier()
 	c.Insecure = true
-	in = person()
+	in := person()
 	in.Exe = "/tmp/x"
 	if v := c.Classify(in); !v.Person || v.Assurance != proto.AssuranceInsecure {
 		t.Errorf("insecure: %+v", v)

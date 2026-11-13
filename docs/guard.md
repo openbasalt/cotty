@@ -337,7 +337,7 @@ from `SO_PEERCRED` and `SO_PEERPIDFD` (Linux 6.5), never from the message:
 | Request | Who | What |
 | --- | --- | --- |
 | `register` (+ socket and directory fds) | a process that is not an agent, in a cgroup whose name starts with `cotty-agent` and which it owns (at most 1024 per user) | its own cgroup becomes an agent cgroup; the sockets go on that agent's allowlist; the directories are guarded, the last `guard` of them without connect rights |
-| `tag-self` | anyone | the caller is tagged (it only restricts) |
+| `tag-self` | anyone | the caller is tagged (it only restricts; the broker never counts a tag as confinement, so a self-tag cannot raise an agent's assurance) |
 | `protect-pts` (+ terminal fd, `O_PATH` is enough, and its master) | a registered broker that holds the terminal's master, when no other live process protects it (at most 1024 per user) | while the caller runs, the terminal opens only for the caller and for the processes whose controlling terminal it is, never for an agent |
 | `check-pts`, `release-pts` (+ terminal fd) | the process that protected it | whether the protection is in place for the caller; end it |
 | `register-broker` (+ session name, the runtime directory and its agent directory) | a broker: the installed cotty binary (root-owned, at a configured path, in root-owned directories, none writable by group or others) running `__broker` without `-dev-insecure`, not dumpable, not traced, not an agent; a session name no other live broker of the user holds (at most 256 per user) | the caller becomes the registered broker of that session name (by pid and start time, until it exits; the first registrant keeps the name); the directories (its user's, mode 0700) become cotty runtime directories |

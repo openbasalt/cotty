@@ -27,6 +27,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/openbasalt/cotty/internal/audit"
+	"github.com/openbasalt/cotty/internal/confine"
 	"github.com/openbasalt/cotty/internal/guard"
 	"github.com/openbasalt/cotty/internal/peer"
 	"github.com/openbasalt/cotty/internal/proto"
@@ -312,6 +313,7 @@ func New(cfg Config) (*Broker, error) {
 	b.codeLimits = map[codeLimitKey]*codeLimiter{}
 	b.classifier = peer.Self()
 	b.classifier.Guard = cfg.Guard
+	b.classifier.SeccompFilter = confine.SeccompSupported()
 	b.classifier.Insecure = cfg.Insecure
 	dir, name := cfg.Dir, cfg.Name
 	b.classifier.OtherTTYs = func() []uint64 { return session.OtherTTYs(dir, name) }

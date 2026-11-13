@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Assurance: an agent is `confined` only when the broker sees that the
+  trusted cotty binary built its confinement (pid 1 of its pid namespace
+  runs cotty agent's init stage, and the agent is in that namespace's
+  user namespace and mount view with no_new_privs and seccomp). Its own
+  user namespace (`unshare -U`), a `cotty-agent*` cgroup or a guard tag
+  no longer raise the level, so they no longer pass `--require-confined`
+  or hide the red warning. Agents under the guard without layer 2, peers
+  whose pid the broker cannot see, and every agent while the cotty binary
+  is writable by the user now read `weak`.
 - Confirm policy: agents may no longer press Tab or BTab (completion ran
   project files such as `./configure --help` and Makefile `$(shell ...)`
   in your shell before any approval), Up, Down, PgUp or PgDn (they

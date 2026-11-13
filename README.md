@@ -70,11 +70,15 @@ weakest one in the status line:
 | Level | Meaning |
 | --- | --- |
 | `strong` | the guard is loaded and confirms the session pts protection, and the agent runs under `cotty agent` and is tagged by the guard |
-| `confined` | the agent runs under `cotty agent`, no guard (or the guard without `cotty agent`) |
-| `weak` | no confinement evidence: an agent CLI started without `cotty agent`, or any other program of yours |
+| `confined` | the agent runs under `cotty agent` (the broker checks that the agent's namespaces were built by the installed cotty binary), no guard |
+| `weak` | no confinement evidence: an agent CLI started without `cotty agent`, a program in namespaces it made itself or tagged by the guard on its own request, or any other program of yours |
 | `insecure` | broker started with `--dev-insecure` (development only) |
 
-What each level stops, case by case, is in docs/security.md.
+The level describes the agent's MCP server, the process that connects to
+the session. It keeps out agents that did not go through `cotty agent`;
+it is not proof against a program that already runs with all your rights,
+which can start a confined MCP server for itself. What each level stops,
+case by case, is in docs/security.md.
 
 ## Requirements
 

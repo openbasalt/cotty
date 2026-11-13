@@ -23,7 +23,13 @@ attaching and prints the reattach code.
 
 `--require-confined` (off by default) refuses agent connections whose
 assurance is `weak`: agents started without `cotty agent`, or any program
-of yours that speaks the protocol. They get `confinement_required`, the
+of yours that speaks the protocol, including one in namespaces it made
+itself (`unshare -U`) or tagged by the guard at its own request. The
+broker accepts a confinement only when the trusted cotty binary built it
+(docs/security.md, Assurance levels); a program that already has your
+rights can still start a confined MCP server for itself, so this keeps
+out agents that skipped `cotty agent`, not a program that is out to
+deceive you. They get `confinement_required`, the
 audit log records the refusal and the status line counts it. Without the
 option such agents are accepted and the status line shows them in red
 ("1 unconfined agent"), so you always know when an agent could reach more

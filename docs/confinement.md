@@ -405,7 +405,10 @@ included):
 
 `cotty agent` prints the level when it starts and passes it to the agent
 as `COTTY_ASSURANCE`. The broker's own assurance levels (`strong`,
-`confined`, `weak`, `insecure`, PLAN section 3) build on this.
+`confined`, `weak`, `insecure`, PLAN section 3) build on this: the broker
+does not read `COTTY_ASSURANCE` (the agent could change it) but checks
+that pid 1 of the agent's pid namespace is the trusted cotty binary
+running the init stage (docs/security.md, Assurance levels).
 
 `cotty doctor` then names the level a session created now can reach:
 `strong available for new sessions (cotty-guard running)`, `confined
