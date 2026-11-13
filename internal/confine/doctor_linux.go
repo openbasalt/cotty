@@ -46,7 +46,7 @@ func Assess(f Features, userns bool) (string, []string) {
 	switch {
 	case f.LandlockABI == 0:
 		partial = true
-		gaps = append(gaps, "no Landlock: only the mount view limits files, and abstract Unix sockets (X11's @/tmp/.X11-unix) and signals to outside processes are not scoped")
+		gaps = append(gaps, "no Landlock: only the mount view limits files, and abstract Unix sockets (X11's @/tmp/.X11-unix) and signals to outside processes are not scoped; cotty agent refuses to start unless given --allow-no-landlock, and sessions report such an agent weak")
 	case f.LandlockABI < 6:
 		partial = true
 		gaps = append(gaps, fmt.Sprintf("Landlock ABI %d (< 6): abstract Unix sockets (X11's @/tmp/.X11-unix, abstract D-Bus addresses) are reachable from the agent; cotty agent refuses to start while one of those listens, unless given --allow-abstract-sockets", f.LandlockABI))
@@ -83,7 +83,7 @@ func Doctor() Report {
 	abi := LandlockABI()
 	switch {
 	case abi == 0:
-		add("landlock", "fail", "absent", "Landlock is not built into this kernel or not in the lsm= boot list. cotty agent still hides files with namespaces, but nothing restricts the agent inside that view and X11's abstract socket stays reachable.")
+		add("landlock", "fail", "absent", "Landlock is not built into this kernel or not in the lsm= boot list. cotty agent refuses to start unless given --allow-no-landlock: it would still hide files with namespaces, but nothing would restrict the agent inside that view and X11's abstract socket would stay reachable. Sessions report such an agent weak.")
 	case abi < 6:
 		ex := "Landlock restricts files, but ABI 6 (Linux 6.12) is needed to keep the agent away from abstract Unix sockets (X11) and from signalling your other processes."
 		if risky := abstractSocketsAtRisk(); len(risky) > 0 {

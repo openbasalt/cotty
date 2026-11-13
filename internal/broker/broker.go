@@ -314,6 +314,7 @@ func New(cfg Config) (*Broker, error) {
 	b.classifier = peer.Self()
 	b.classifier.Guard = cfg.Guard
 	b.classifier.SeccompFilter = confine.SeccompSupported()
+	b.classifier.LandlockABI = confine.LandlockABI()
 	b.classifier.Insecure = cfg.Insecure
 	dir, name := cfg.Dir, cfg.Name
 	b.classifier.OtherTTYs = func() []uint64 { return session.OtherTTYs(dir, name) }

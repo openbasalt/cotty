@@ -149,9 +149,10 @@ without `.git` (its hooks and config are then the agent's),
 `--allow-git-links` accepts a project whose `.git`, git config or hooks
 are symbolic links, and `--allow-abstract-sockets` starts on kernels
 below Landlock ABI 6 even though a display or session bus is reachable
-through abstract sockets there. `--show-hidden` leaves a profile's
-hidden directories visible (for Claude Code, `~/.claude/ide`, whose lock
-files hold your IDE's auth token).
+through abstract sockets there. `--allow-no-landlock` starts on a kernel
+without Landlock, where sessions then report the agent `weak`.
+`--show-hidden` leaves a profile's hidden directories visible (for Claude
+Code, `~/.claude/ide`, whose lock files hold your IDE's auth token).
 
 The lock does not light for a password prompt inside a program that
 relays the terminal in raw mode (`sudo -i`, `ssh`, `tmux`, `screen`):

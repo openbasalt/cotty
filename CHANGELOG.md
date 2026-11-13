@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `cotty agent` refuses a kernel without Landlock (ABI 0) unless given
+  `--allow-no-landlock`; it used to start the agent without Landlock and
+  the session still reported it `confined`. Sessions now report every
+  agent `weak` on such a kernel, and `cotty doctor` says so.
 - Assurance: an agent is `confined` only when the broker sees that the
   trusted cotty binary built its confinement (pid 1 of its pid namespace
   runs cotty agent's init stage, and the agent is in that namespace's

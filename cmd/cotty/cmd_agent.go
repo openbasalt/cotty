@@ -39,6 +39,7 @@ func runAgent(args []string) int {
 	fs.BoolVar(&opts.Quiet, "quiet", false, "no banner (gaps are printed anyway)")
 	fs.BoolVar(&opts.AllowGitInit, "allow-git-init", false, "in a project without .git, let the agent create one (its hooks and config would run with your rights when you use git there)")
 	fs.BoolVar(&opts.AllowAbstractSockets, "allow-abstract-sockets", false, "start on Landlock ABI < 6 even when X11 or D-Bus listen on abstract sockets the agent could reach")
+	fs.BoolVar(&opts.AllowNoLandlock, "allow-no-landlock", false, "start on a kernel without Landlock, where only the mount view limits the agent's files (sessions report the agent weak)")
 	fs.BoolVar(&opts.AllowGitLinks, "allow-git-links", false, "start even when a git file cotty protects (.git, its config or hooks, core.hooksPath) is a symbolic link the agent could replace")
 	fs.BoolVar(&opts.ShowHidden, "show-hidden", false, "leave the profile's hidden directories visible (claude: ~/.claude/ide, whose lock files hold your IDE's auth token; needed when the agent should talk to your IDE)")
 	fs.BoolVar(&list, "list-profiles", false, "list the profiles and exit")

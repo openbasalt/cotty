@@ -54,7 +54,7 @@ func person() Info {
 func classifier() *Classifier {
 	return &Classifier{UID: 1000, SelfPID: 300, SelfUserNS: "user:[1]", SelfPidNS: "pid:[2]",
 		SelfExe: "/usr/bin/cotty", ExeTrusted: true, ShellPID: 310, ShellSID: 310,
-		SessionTTY: unix.Mkdev(136, 7), Guard: NoGuard{},
+		SessionTTY: unix.Mkdev(136, 7), Guard: NoGuard{}, LandlockABI: 6,
 		OtherTTYs: func() []uint64 { return []uint64{unix.Mkdev(136, 9)} }}
 }
 

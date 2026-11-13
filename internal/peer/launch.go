@@ -38,6 +38,9 @@ func (c *Classifier) verifyLaunch(in Info) string {
 	if !c.ExeTrusted {
 		return "the cotty binary can be replaced by the user (" + c.ExeReason + "), so a confinement it reports proves nothing"
 	}
+	if c.LandlockABI <= 0 {
+		return "the kernel has no Landlock, so cotty agent cannot restrict the agent's files"
+	}
 	if in.PID <= 0 {
 		return "its pid is not visible from the session, so its confinement cannot be checked"
 	}

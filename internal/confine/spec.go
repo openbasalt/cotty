@@ -1,5 +1,11 @@
 package confine
 
+import "errors"
+
+var errNoLandlock = errors.New("this kernel has no Landlock (not built in, or not in the lsm= boot list): " +
+	"only the mount view would limit the agent's files, and abstract sockets and signals would not be scoped. " +
+	"Use a kernel with Landlock, or start with --allow-no-landlock to accept that (sessions then report the agent weak)")
+
 // Spec is everything the confined stages need, computed outside by the
 // launcher and passed to them as JSON on a pipe (never in the environment
 // or on the command line, which the agent could read).
@@ -66,6 +72,31 @@ type LandlockPlan struct {
 	// abstract sockets and signals (ABI < 6); the launcher sets it only
 	// after its own check or the person's explicit override.
 	NoScopesOK bool `json:"noScopesOK"`
+	// NoLandlockOK lets the exec stage go on without Landlock at all (ABI
+	// 0); the launcher sets it only on the person's explicit
+	// --allow-no-landlock (review COT-4).
+	NoLandlockOK bool `json:"noLandlockOK,omitempty"`
+}
+
+// landlockGate decides, from the kernel's Landlock ABI, whether the
+// launcher may start the agent: without Landlock (ABI 0) only when the
+// person accepted that explicitly (review COT-4: the agent used to start
+// without it, still reported confined).
+func landlockGate(abi int, allowNone bool) error {
+	if abi > 0 || allowNone {
+		return nil
+	}
+	return errNoLandlock
+}
+
+// landlockApplied decides, in the exec stage, whether a failed
+// ApplyLandlock stops the start: always, unless the kernel has no
+// Landlock and the launcher accepted that (NoLandlockOK).
+func landlockApplied(abi int, err error, noLandlockOK bool) error {
+	if err == nil || (abi == 0 && noLandlockOK) {
+		return nil
+	}
+	return err
 }
 
 // Link is a symbolic link recreated inside the confinement.

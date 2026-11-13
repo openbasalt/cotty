@@ -58,6 +58,10 @@ type Classifier struct {
 	// SeccompFilter: `cotty agent` installs its seccomp filter on this
 	// system (confine.SeccompSupported), so a confined agent shows one.
 	SeccompFilter bool
+	// LandlockABI is the kernel's Landlock ABI (confine.LandlockABI). At
+	// 0, cotty agent runs the agent without Landlock (only on
+	// --allow-no-landlock), which is not confined (review COT-4).
+	LandlockABI int
 }
 
 // Verdict is the result of classifying one peer.

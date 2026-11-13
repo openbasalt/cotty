@@ -126,6 +126,8 @@ func TestLaunchForgeries(t *testing.T) {
 		},
 		"untrusted binary": func(ts []fakeTask, _ *Info, c *Classifier) { c.ExeTrusted, c.ExeReason = false, "test" },
 		"init unreadable":  func(ts []fakeTask, _ *Info, _ *Classifier) { ts[1].exe = "" },
+		// COT-4: without Landlock the agent is not confined.
+		"no landlock": func(ts []fakeTask, _ *Info, c *Classifier) { c.LandlockABI = 0 },
 	}
 	for name, mut := range cases {
 		t.Run(name, func(t *testing.T) {
