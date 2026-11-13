@@ -33,7 +33,14 @@ channels are opt-in.
   `cat ~/.config/x/token` prints a secret cotty does not know about.
 - Not a guard for secrets typed with echo on. `export TOKEN=...` is visible
   to the agent unless you turned on private mode first or the value is on
-  the masking list.
+  the masking list. Private mode hides the rows, not the shell's history:
+  once it is off, an agent can draw the command again (Up, `history`,
+  `!!`, a zsh autosuggestion) and read it. Under `--policy confirm` the
+  keys and characters that recall history are refused to agents in bash
+  and zsh; under the default policy nothing stops it. Start such a command
+  with a space and have the shell skip it (bash
+  `HISTCONTROL=ignorespace`, zsh `setopt HIST_IGNORE_SPACE`), or put the
+  value on the masking list.
 - Not a defence against a malicious kernel or root.
 - Not a network filter. A confined agent can reach any TCP or UDP service
   you can, including services on localhost.

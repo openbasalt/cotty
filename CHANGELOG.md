@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Confirm policy: agents may no longer press Tab or BTab (completion ran
+  project files such as `./configure --help` and Makefile `$(shell ...)`
+  in your shell before any approval), Up, Down, PgUp or PgDn (they
+  recalled commands typed in private mode), nor type tabs, history
+  expansion (`!`, `^`) or, outside a UTF-8 locale, bytes above 0x7f
+  (Meta keys for readline). Left: text, held Enter, Backspace, Delete,
+  Space, Left, Right, Home, End and C-c (docs/broker.md, Confirm policy).
+- Docs: private mode does not keep a command out of the shell's history;
+  README and docs/broker.md say so where private mode is described.
 - The pts exception list lapses with cotty-guard's daemon: a clean stop
   empties it in the kernel, and the programs stop honouring it once the
   daemon's heartbeat is 90 s old, so a listed pinentry is refused while

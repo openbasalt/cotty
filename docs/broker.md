@@ -32,6 +32,41 @@ for a running session (and closes the weak agents already connected);
 `--require-confined=false` turns it off; plain `cotty share` keeps the
 setting.
 
+## Confirm policy
+
+`--policy confirm` holds every Enter an agent types until you accept the
+line (`^] y`) or reject it (`^] n`). What the agent types before the Enter
+reaches the shell at once, so under this policy agents are refused
+(`policy_denied`) every key and character that makes the line editor act
+on its own:
+
+- Tab and BTab. Completion runs programs: bash-completion runs
+  `./configure --help` to list its options and `make -npq`, which
+  evaluates `$(shell ...)` in a Makefile, and zsh's completion does the
+  same. A file the agent wrote in the project would run with your rights
+  before you were asked anything.
+- Up, Down, PgUp and PgDn: they recall the shell's history, commands
+  typed in private mode included (see Private mode below).
+- Esc, Insert, F1 to F12 and every Ctrl and Meta key except C-c: among
+  them C-p, C-r, M-. and M-< recall history, and C-x C-e, M-C-e
+  (shell-expand-line) and C-o run or submit the line.
+- In text: tabs, control characters other than Enter, Backspace and C-c,
+  escape sequences, history expansion (`!` followed by anything but a
+  blank, `=` or `(`, and `^`), and, when the shell's locale is not UTF-8,
+  bytes above 0x7f. Space bound to magic-space (oh-my-zsh does that)
+  expands `!!` or `^old^new` on the screen without an Enter, and after an
+  Enter the expanded line, not the one you approved, would run. In a C or
+  POSIX locale readline reads bytes above 0x7f as Meta keys, and M-C-e
+  runs the command substitutions of the line.
+
+Left are text, Enter (held), Backspace, Delete, Space, Left, Right, Home,
+End and C-c. These decisions follow the default bindings of bash
+(readline) and zsh (zle), in emacs and vi mode. A binding of your own that
+makes one of the keys left run something (a widget on Space or End) is not
+known to cotty, and neither is readline's `convert-meta` turned on in a
+UTF-8 locale. Under the default policy (`auto`) an agent types and runs
+whatever it wants.
+
 ## The session's shell
 
 The shell runs with `HISTFILE` set to
@@ -93,6 +128,25 @@ Hotkeys: `Ctrl-]` then
 | d   | detach (prints the reattach code) |
 | ?   | help |
 | Ctrl-] | send a literal Ctrl-] |
+
+## Private mode
+
+`^] p` turns private mode on: agent input is refused with
+`private_mode`, and what agents read is frozen at the moment it started;
+rows written meanwhile read `[private]` afterwards. Private mode hides
+rows, not what the shell keeps. A command line you type in private mode
+stays in the shell's history, and once private mode is off an agent can
+draw it on the screen again and read it: with Up or `!!`, with `history`
+or `fc -l`, or through a zsh autosuggestion that shows history while it
+types. Under `--policy confirm` the history keys and history expansion
+are refused to agents (Confirm policy above), which covers bash and zsh
+with their default bindings, but a `history` you approve still prints the
+line, and autosuggestions still show it. Under the default policy nothing
+stops it. cotty cannot keep a line out of every shell's history, so for a
+secret typed with echo on: start the command with a space and set
+`HISTCONTROL=ignorespace` (bash) or `setopt HIST_IGNORE_SPACE` (zsh, which
+still keeps the line until the next command runs: run any command right
+after it), or put the value on the masking list (`cotty secrets add`).
 
 ## The lock
 

@@ -358,12 +358,18 @@ item says what can happen and what to do meanwhile.
 ### Private mode and reads
 
 - Private mode hides rows, not what programs keep. After it ends, the
-  shell's history (Up arrow), a redraw (`C-l` in a full screen program
-  that kept the text) or a pager's buffer can draw the text again, now
-  as ordinary output the agent reads. Start commands typed in private
-  mode with a space and set `HISTCONTROL=ignorespace` (bash) or
-  `setopt HIST_IGNORE_SPACE` (zsh), and leave pagers and editors that
-  showed private text before turning private mode off.
+  shell's history (Up arrow, `history`, `!!`, zsh autosuggestions), a
+  redraw (`C-l` in a full screen program that kept the text) or a pager's
+  buffer can draw the text again, now as ordinary output the agent reads.
+  Under `--policy confirm` agents cannot press Up, Down, PgUp, PgDn or any
+  Ctrl or Meta key but C-c, nor type history expansion (`!`, `^`), which
+  closes the recall keys of bash and zsh with their default bindings; an
+  approved `history` and autosuggestions still show the line, and under
+  the default policy nothing stops it (broker.md, Private mode). Start
+  commands typed in private mode with a space and set
+  `HISTCONTROL=ignorespace` (bash) or `setopt HIST_IGNORE_SPACE` (zsh,
+  then run one more command), and leave pagers and editors that showed
+  private text before turning private mode off.
 - `cursor_since` stops during private mode and jumps when it ends; the
   jump tells how many lines scrolled meanwhile (not what they held).
 - `sudo-rs` (the default `sudo` on Ubuntu 26.04) and `sudo` with

@@ -52,12 +52,59 @@ func TestKeys(t *testing.T) {
 }
 
 func TestConfirmText(t *testing.T) {
-	if !confirmTextOK("ls -la\r") || !confirmTextOK("x\x7f\t") {
-		t.Error("plain text refused")
+	for _, s := range []string{"ls -la\r", "x\x7f", "git commit -m 'café'", "[ $a != b ]", "if ! true; then :; fi", "echo $((1 + 2))"} {
+		if !confirmTextOK(s, true) {
+			t.Errorf("%q refused under confirm", s)
+		}
 	}
-	for _, s := range []string{"\x0f", "\x1b[A", "a\x18\x05"} {
-		if confirmTextOK(s) {
+	for _, s := range []string{"\x0f", "\x1b[A", "a\x18\x05",
+		// Completion runs programs the agent may have written (COT-1).
+		"./configure --\t", "make \t",
+		// History expansion draws earlier commands, private ones too (COT-3).
+		"echo !!", "!-1 ", "echo !?TOKEN?", "!$", "echo hi!", "^e^e ", "x^y",
+	} {
+		if confirmTextOK(s, true) {
 			t.Errorf("%q allowed under confirm", s)
+		}
+	}
+	// Outside a UTF-8 locale readline's convert-meta reads 0x85 as M-C-e
+	// (shell-expand-line, which runs command substitutions).
+	if confirmTextOK("$(touch x)\u00c5", false) || !confirmTextOK("$(touch x)\u00c5", true) {
+		t.Error("eighth-bit bytes: wrong decision for the locale")
+	}
+}
+
+func TestConfirmKeys(t *testing.T) {
+	// COT-1, COT-3: completion and history recall are not sent without
+	// approval.
+	for _, k := range []string{"Tab", "BTab", "Up", "Down", "PgUp", "PgDn", "Esc", "M-.", "M-_", "C-p", "C-r", "C-x", "C-e", "M-?", "F1"} {
+		if confirmKeys[k] {
+			t.Errorf("%s allowed under confirm", k)
+		}
+	}
+	for _, k := range []string{"Enter", "Backspace", "Delete", "Space", "Left", "Right", "Home", "End", "C-c"} {
+		if !confirmKeys[k] {
+			t.Errorf("%s refused under confirm", k)
+		}
+	}
+}
+
+func TestLocaleIsUTF8(t *testing.T) {
+	cases := []struct {
+		env  []string
+		want bool
+	}{
+		{[]string{"LANG=en_US.UTF-8"}, true},
+		{[]string{"LANG=C.utf8"}, true},
+		{[]string{"LANG=C"}, false},
+		{nil, false},
+		{[]string{"LANG=en_US.UTF-8", "LC_ALL=C"}, false},
+		{[]string{"LANG=C", "LC_CTYPE=pt_BR.UTF-8"}, true},
+		{[]string{"LC_ALL=pt_BR.UTF-8", "LC_CTYPE=C"}, true},
+	}
+	for _, c := range cases {
+		if got := localeIsUTF8(c.env); got != c.want {
+			t.Errorf("%v: %v", c.env, got)
 		}
 	}
 }
