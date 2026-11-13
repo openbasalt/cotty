@@ -229,18 +229,7 @@ func TestRawSetuidPrompt(t *testing.T) {
 // list described while the group was young. The secret program rule
 // shares the path with the setuid rule and needs no root binary.
 func TestLateExecPromptDetected(t *testing.T) {
-	sleepBin, err := exec.LookPath("sleep")
-	if err != nil {
-		t.Skip(err)
-	}
-	data, err := os.ReadFile(sleepBin)
-	if err != nil {
-		t.Skip(err)
-	}
-	prompt := filepath.Join(t.TempDir(), "pinentry-tty")
-	if err := os.WriteFile(prompt, data, 0o755); err != nil {
-		t.Fatal(err)
-	}
+	prompt := promptCopy(t)
 	job := exec.Command("sh", "-c", "sleep 0.7; exec "+prompt+" 30")
 	job.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	if err := job.Start(); err != nil {
