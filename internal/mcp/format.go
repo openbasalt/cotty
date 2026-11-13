@@ -18,7 +18,8 @@ var hints = map[string]string{
 	proto.ErrPersonTyping: "The person is typing right now. Wait until retry_after_ms passes and try again; never type over them.",
 	proto.ErrConfirmationPending: "Your previous line waits for the person's approval (confirm policy). " +
 		"Call term_wait with for=confirmation, then read the screen.",
-	proto.ErrPolicyDenied: "This session uses the confirm policy: send plain text, and only the keys Enter, Tab, Backspace and C-c.",
+	proto.ErrPolicyDenied: "This session uses the confirm policy: send plain text without tabs or history expansion (! and ^), " +
+		"and only the keys Enter, Backspace, Delete, Space, Left, Right, Home, End and C-c. Type whole commands; do not complete them with Tab.",
 	proto.ErrNotShared: "The person has not shared this session with agents. Ask them to run `cotty share SESSION`, " +
 		"or to start a shared session with `cotty new --ai`.",
 	proto.ErrSessionEnded: "The session ended or closed this connection. Call term_sessions to see what is shared now.",

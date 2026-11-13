@@ -269,6 +269,17 @@ fi
 known_open S22
 gap u-pts-pidfd-getfd "pidfd_getfd of the shell's fd 0 skips file_open; review S22" "$PROBE" pidfd-getfd "$SHELL_PID" "$PTS"
 deny u-hello-agent-require-confined "$PROBE" hello "$RT/cotty/agent/$RS.sock" agent
+# Namespaces any process can make for itself are no confinement (review
+# COT-2): an unconfined program in its own user and pid namespace, or one
+# that asked the guard to tag it, stays weak and is refused.
+if unshare -U --map-current-user true 2>/dev/null; then
+	deny u-hello-agent-unshare-require-confined unshare -Upf --map-current-user "$PROBE" hello "$RT/cotty/agent/$RS.sock" agent
+else
+	row SKIP u-hello-agent-unshare-require-confined "unprivileged unshare -U is not allowed here"
+fi
+if [ "$GUARD_STATE" = loaded ] && [ -x "$GUARDPROBE" ]; then
+	deny u-hello-agent-tagself-require-confined "$GUARDPROBE" tag-self-then unshare -Upf --map-current-user "$PROBE" hello "$RT/cotty/agent/$RS.sock" agent
+fi
 
 # --- confined (assurance confined) ---
 "$COTTY" agent --profile generic --pty always --project "$P" --ro "$T" -- \

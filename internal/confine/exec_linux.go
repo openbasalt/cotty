@@ -44,7 +44,7 @@ func RunExec() {
 	if abi := LandlockABI(); abi < 6 && !sp.Landlock.NoScopesOK {
 		execFail(125, "landlock ABI %d cannot scope abstract sockets and signals, and the launcher did not accept that", abi)
 	}
-	if abi, err := ApplyLandlock(sp.Landlock); err != nil && abi > 0 {
+	if abi, err := ApplyLandlock(sp.Landlock); landlockApplied(abi, err, sp.Landlock.NoLandlockOK) != nil {
 		execFail(125, "landlock: %v", err)
 	}
 	if sp.Seccomp && SeccompSupported() {

@@ -10,7 +10,7 @@ optional, see [guard.md](guard.md).
 
 ```
 cotty agent [--profile P] [--project DIR] [--ro PATH] [--rw PATH] [--agent-dir DIR] [--no-mcp]
-            [--allow-git-init] [--allow-git-links] [--allow-abstract-sockets] [--quiet] [--] CMD [ARGS...]
+            [--allow-git-init] [--allow-git-links] [--allow-abstract-sockets] [--allow-no-landlock] [--quiet] [--] CMD [ARGS...]
 cotty agent --profile claude              # runs the profile's own command
 cotty agent --list-profiles
 cotty agent --dry-run -- claude -p hi     # print the computed plan as JSON
@@ -279,6 +279,15 @@ count. `--allow-abstract-sockets` accepts the risk. The exec stage refuses a ker
 launcher made that decision, so Landlock's best-effort mode never drops
 the scoping silently.
 
+A kernel without Landlock at all (ABI 0: not built in, or not in the
+`lsm=` boot list, as on some older enterprise kernels and cloud images) is
+refused too: only the mount view would limit the agent's files, and
+abstract sockets and signals would not be scoped. `--allow-no-landlock`
+starts the agent anyway; the exec stage then goes on without Landlock
+only because the launcher recorded that decision, and sessions report
+the agent `weak`, since what it can reach is no longer what `confined`
+means (review COT-4).
+
 ### Seccomp
 
 A classic BPF filter written in Go (`internal/confine/seccomp_linux.go`),
@@ -405,7 +414,10 @@ included):
 
 `cotty agent` prints the level when it starts and passes it to the agent
 as `COTTY_ASSURANCE`. The broker's own assurance levels (`strong`,
-`confined`, `weak`, `insecure`, PLAN section 3) build on this.
+`confined`, `weak`, `insecure`, PLAN section 3) build on this: the broker
+does not read `COTTY_ASSURANCE` (the agent could change it) but checks
+that pid 1 of the agent's pid namespace is the trusted cotty binary
+running the init stage (docs/security.md, Assurance levels).
 
 `cotty doctor` then names the level a session created now can reach:
 `strong available for new sessions (cotty-guard running)`, `confined

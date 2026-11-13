@@ -153,7 +153,9 @@ error. The result ends with the bottom 20 rows of the screen.
   asterisks) reads `[private]` afterwards.
 - Private mode hides rows, not what programs keep: after it ends, shell
   history, a redraw or a pager can print the text again as ordinary
-  output (docs/security.md, Known limits).
+  output (docs/broker.md, Private mode; docs/security.md, Known limits).
+  Under the confirm policy agents cannot press Up, Down or Tab, nor type
+  history expansion.
 - Before a read the broker waits for the output to pause (80 ms quiet,
   at most 400 ms) so a value is not caught half printed. This is best
   effort: a value that arrives in pieces more than 80 ms apart can show

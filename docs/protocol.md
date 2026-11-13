@@ -299,11 +299,21 @@ by the user (otherwise the person assurance is `weak`); on SELinux,
 SO_PEERSEC not an agent domain. Everything else is an agent. See
 `internal/peer` for the exact code.
 
-Assurance, reported in hello and state: `strong` (guard loaded and the
-agent tagged), `confined` (agent peer in its own namespaces or agent
-cgroup), `weak` (no confinement evidence, or the cotty binary is writable
-by the user), `insecure` (broker started with `--dev-insecure`; every
-same-uid peer counts as a person; development only).
+Assurance, reported in hello and state: `strong` (`confined`, and the
+guard is loaded and has tagged the agent), `confined` (the agent runs in a
+confinement the trusted cotty binary built: its pid namespace's pid 1 is
+the broker's own root-owned binary running `cotty agent`'s init stage, it
+is in that namespace's user namespace and mount view, and it has
+no_new_privs and, where cotty has a filter for the architecture, a seccomp
+filter), `weak` (anything else, including a peer whose pid the broker
+cannot see, a peer in namespaces or a `cotty-agent*` cgroup it made
+itself, a peer tagged by the guard without that confinement, or a cotty
+binary writable by the user), `insecure` (broker started with
+`--dev-insecure`; every same-uid peer counts as a person; development
+only). The level describes the process that connected (the agent's MCP
+server), not what talks to it over its stdio: a program that already has
+all of the user's rights can start a confined MCP server for itself
+(docs/security.md, Assurance levels).
 
 ## 7. Admission of person and control connections
 
@@ -492,7 +502,7 @@ Agent `type` and `keys` are refused, with these codes, in this order:
 | `keyboard_held`        | the person holds the keyboard |
 | `person_typing`        | the person typed in the last 1.5 s; `retry_after_ms` set |
 | `confirmation_pending` | an agent line waits for the person's answer |
-| `policy_denied`        | under the confirm policy: control characters other than Enter, Tab, Backspace and C-c, or escape sequences in `text` |
+| `policy_denied`        | under the confirm policy: keys other than Enter, Backspace, Delete, Space, Left, Right, Home, End and C-c; in `text`, tabs, control characters other than Enter, Backspace and C-c, escape sequences, history expansion (`!` not followed by a blank, `=` or `(`, and `^`) and, when the shell's locale is not UTF-8, bytes above 0x7f (broker.md, Confirm policy) |
 
 Under the confirm policy the text before an Enter is typed, the Enter is
 held and the person sees "agent wants to run: LINE" (or, when the line

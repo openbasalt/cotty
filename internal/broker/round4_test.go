@@ -26,17 +26,22 @@ func startGroup(t *testing.T, script string) *exec.Cmd {
 }
 
 // promptCopy copies sleep to a file named like a listed prompt program.
+//
+// The copy is of the test binary, which sleeps when started under that
+// name (TestMain), not of the system's sleep: on Ubuntu 25.10 and later
+// sleep is the uutils multicall binary, which picks the utility by its
+// own name and exits at once as "pinentry-tty" (CI on ubuntu-26.04).
 func promptCopy(t *testing.T) string {
 	t.Helper()
-	sleepBin, err := exec.LookPath("sleep")
+	self, err := os.Executable()
 	if err != nil {
-		t.Skip(err)
+		t.Fatal(err)
 	}
-	data, err := os.ReadFile(sleepBin)
+	data, err := os.ReadFile(self)
 	if err != nil {
-		t.Skip(err)
+		t.Fatal(err)
 	}
-	p := filepath.Join(t.TempDir(), "pinentry-tty")
+	p := filepath.Join(t.TempDir(), sleeperName)
 	if err := os.WriteFile(p, data, 0o755); err != nil {
 		t.Fatal(err)
 	}

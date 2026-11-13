@@ -91,7 +91,8 @@ func toolList() []tool {
 			Description: "Press named keys in the shared terminal, in order: Enter, Tab, BTab, Esc, Backspace, Delete, Insert, Home, End, PgUp, PgDn, " +
 				"Up, Down, Left, Right, F1 to F12, Space, C-a to C-z (C-c interrupts, C-d ends input), C-@, C-[, C-\\, C-], C-^, C-_, M-<char>. " +
 				"Use it for menus, editors, pagers and to interrupt a command. " + refusals +
-				" Under the confirm policy only Enter, Tab, Backspace and C-c are allowed.",
+				" Under the confirm policy only Enter, Backspace, Delete, Space, Left, Right, Home, End and C-c are allowed " +
+				"(Tab completion runs programs, and Up and Down recall history).",
 			InputSchema: obj(map[string]any{
 				"keys":    map[string]any{"type": "array", "items": map[string]any{"type": "string"}, "description": "key names, 1 to 64"},
 				"session": str(sessionDesc),

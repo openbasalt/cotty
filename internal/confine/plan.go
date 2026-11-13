@@ -35,6 +35,10 @@ type Options struct {
 	// AllowAbstractSockets starts the agent on Landlock ABI < 6 even when
 	// abstract X11 or D-Bus sockets are listening.
 	AllowAbstractSockets bool
+	// AllowNoLandlock starts the agent on a kernel without Landlock (ABI
+	// 0), where only the mount view limits its files. Sessions report
+	// such an agent weak.
+	AllowNoLandlock bool
 	// AllowGitLinks starts the agent even when a git file cotty protects
 	// (the .git entry, config, hooks, core.hooksPath) is a symbolic link,
 	// which the agent could replace.

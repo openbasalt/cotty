@@ -27,6 +27,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/openbasalt/cotty/internal/audit"
+	"github.com/openbasalt/cotty/internal/confine"
 	"github.com/openbasalt/cotty/internal/guard"
 	"github.com/openbasalt/cotty/internal/peer"
 	"github.com/openbasalt/cotty/internal/proto"
@@ -116,11 +117,15 @@ type Broker struct {
 	model      *Model
 	logf       func(string, ...any)
 
-	ptmx    *os.File
-	cmd     *exec.Cmd
-	ptsPath string
-	ptsRdev uint64
-	ln      *net.UnixListener
+	ptmx *os.File
+	cmd  *exec.Cmd
+	// shellUTF8: the shell's environment selects a UTF-8 locale, so its
+	// line editor reads bytes above 0x7f as characters, not Meta keys
+	// (confirmTextOK). Set before the session serves anybody.
+	shellUTF8 bool
+	ptsPath   string
+	ptsRdev   uint64
+	ln        *net.UnixListener
 	// agentLn serves the agent endpoint (paths.AgentSocket) while the
 	// session is shared; nil otherwise. Guarded by mu.
 	agentLn *net.UnixListener
@@ -308,6 +313,8 @@ func New(cfg Config) (*Broker, error) {
 	b.codeLimits = map[codeLimitKey]*codeLimiter{}
 	b.classifier = peer.Self()
 	b.classifier.Guard = cfg.Guard
+	b.classifier.SeccompFilter = confine.SeccompSupported()
+	b.classifier.LandlockABI = confine.LandlockABI()
 	b.classifier.Insecure = cfg.Insecure
 	dir, name := cfg.Dir, cfg.Name
 	b.classifier.OtherTTYs = func() []uint64 { return session.OtherTTYs(dir, name) }
@@ -422,6 +429,7 @@ func (b *Broker) startShell() error {
 	_ = tty.Close()
 	b.mu.Lock()
 	b.ptmx, b.cmd = ptmx, cmd
+	b.shellUTF8 = localeIsUTF8(env)
 	b.mu.Unlock()
 	b.classifier.ShellPID = cmd.Process.Pid
 	b.classifier.ShellSID = cmd.Process.Pid // the shell leads its session (Setsid)
@@ -1350,8 +1358,10 @@ func (b *Broker) agentType(c *conn, text string, enter bool, keys []string) (pro
 		if len(text) > maxAgentText {
 			return deny(proto.Errorf(proto.ErrBadRequest, "text longer than %d bytes", maxAgentText))
 		}
-		if confirm && !confirmTextOK(text) {
-			return deny(proto.Errorf(proto.ErrPolicyDenied, "control characters and escape sequences are not allowed under the confirm policy"))
+		if confirm && !confirmTextOK(text, b.shellUTF8) {
+			return deny(proto.Errorf(proto.ErrPolicyDenied, "under the confirm policy agent text may not hold tabs (completion runs programs), "+
+				"control characters, escape sequences, history expansion (! followed by anything but a blank, = or (, and ^) "+
+				"or, outside a UTF-8 locale, bytes above 0x7f"))
 		}
 		seq = []byte(text)
 		if enter {

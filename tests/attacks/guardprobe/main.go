@@ -18,6 +18,10 @@
 //	guardprobe register-again  ask the daemon to register our cgroup again
 //	                           (an agent must not be able to register)
 //	guardprobe tag-self        ask to be tagged (allowed: it only restricts)
+//	guardprobe tag-self-then CMD...
+//	                           ask to be tagged, then exec CMD (a tag must
+//	                           never raise an agent's assurance, review
+//	                           COT-2)
 //	guardprobe steal-pts PTS   protect a pts somebody else protects, with
 //	                           ourselves as its owner (must be refused)
 //	guardprobe protect-pts     protect a pty of our own (we hold its
@@ -79,6 +83,25 @@ func main() {
 			}
 			fmt.Println(tag)
 		})
+	case "tag-self-then":
+		if len(args) == 0 {
+			fmt.Fprintln(os.Stderr, "usage: guardprobe tag-self-then CMD...")
+			os.Exit(2)
+		}
+		withConn(func(c *guard.Conn) {
+			if _, err := c.TagSelf(); err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		})
+		path, err := exec.LookPath(args[0])
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(2)
+		}
+		err = syscall.Exec(path, args, os.Environ())
+		fmt.Println(err)
+		os.Exit(2)
 	default:
 		fmt.Fprintf(os.Stderr, "unknown subcommand %s\n", os.Args[1])
 		os.Exit(2)

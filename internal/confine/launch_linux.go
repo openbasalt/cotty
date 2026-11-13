@@ -149,6 +149,10 @@ func runOutside(pl *Plan, opts Options, cg string) int {
 	sp.PTY = sp.PTY || stdioTTY
 	f := Features{LandlockABI: LandlockABI(), Seccomp: SeccompSupported(), Cgroup: cg, PTY: sp.PTY}
 	level, gaps := Assess(f, true)
+	if err := landlockGate(f.LandlockABI, opts.AllowNoLandlock); err != nil {
+		return fail("%v", err)
+	}
+	sp.Landlock.NoLandlockOK = f.LandlockABI == 0
 	sp.Env = SetEnv(sp.Env, map[string]string{"COTTY_ASSURANCE": level})
 	// Without Landlock scoping (ABI < 6) abstract sockets are reachable:
 	// refuse when a display, bus or input method listens on one, unless

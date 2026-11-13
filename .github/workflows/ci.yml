@@ -16,8 +16,13 @@ jobs:
     env:
       CGO_ENABLED: "0"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      # Actions are pinned by commit SHA; Dependabot keeps them current.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # go-version-file installs exactly the go line of go.mod, so that
+      # line names the patch release the binaries are built with.
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
       - name: gofmt, vet, unit tests

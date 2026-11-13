@@ -17,6 +17,30 @@ for the session, in the status line and in `term_read`'s state):
 | `strong` | the guard (`cotty-guard`, BPF LSM, layer 3) is loaded, the agent is tagged, and the guard confirms that the session's pts protection is in place (the broker asks every two seconds; while the guard does not answer the session is `confined`, and after a lapse of the protection it never returns to `strong`) |
 | `confined` | the agent runs under `cotty agent` (its own namespaces, Landlock, seccomp, own cgroup), no guard |
 | `weak` | no confinement evidence: an agent CLI started without `cotty agent`, or any other program of yours that speaks the protocol. It can do everything you can do as a program, outside cotty's view |
+
+How the broker tells `confined` from `weak` (review COT-2): only from
+what a process cannot give itself. Its own user namespace (`unshare -U`),
+a cgroup named `cotty-agent*` (the user can create one in the delegated
+part of the cgroup tree) or a guard tag (any process may ask the guard to
+tag itself; that only restricts it) count for nothing. The agent must run
+in a pid namespace whose pid 1 is the broker's own cotty binary, which
+must be root-owned and not writable by you, running the init stage of
+`cotty agent`; it must be in that namespace's user namespace and in the
+mount view the init stage built (a process that entered the namespaces
+from outside is not), with no_new_privs and, on x86_64 and aarch64, a
+seccomp filter. A peer the broker cannot check (its pid is not visible,
+its /proc entries cannot be read) is `weak`. `strong` needs all of that
+plus the guard's tag.
+
+What the level does not say: it describes the process that connected to
+the session, which is the agent's MCP server (`cotty mcp`), not the agent
+CLI behind its stdio. A program that already runs with all your rights
+can start a confined MCP server for itself (`cotty agent -- cotty mcp`),
+or hand the init stage a plan of its own, and is then reported
+`confined` (`strong` with the guard). `--require-confined` keeps out
+agents that did not go through `cotty agent` at all; it is not proof
+against a program that has your rights already, which the guard limits
+in the kernel (rows below) and only confinement from the start avoids.
 | `insecure` | broker started with `--dev-insecure` (development only) |
 
 A session that must never serve a `weak` agent is started (or shared) with
@@ -358,12 +382,18 @@ item says what can happen and what to do meanwhile.
 ### Private mode and reads
 
 - Private mode hides rows, not what programs keep. After it ends, the
-  shell's history (Up arrow), a redraw (`C-l` in a full screen program
-  that kept the text) or a pager's buffer can draw the text again, now
-  as ordinary output the agent reads. Start commands typed in private
-  mode with a space and set `HISTCONTROL=ignorespace` (bash) or
-  `setopt HIST_IGNORE_SPACE` (zsh), and leave pagers and editors that
-  showed private text before turning private mode off.
+  shell's history (Up arrow, `history`, `!!`, zsh autosuggestions), a
+  redraw (`C-l` in a full screen program that kept the text) or a pager's
+  buffer can draw the text again, now as ordinary output the agent reads.
+  Under `--policy confirm` agents cannot press Up, Down, PgUp, PgDn or any
+  Ctrl or Meta key but C-c, nor type history expansion (`!`, `^`), which
+  closes the recall keys of bash and zsh with their default bindings; an
+  approved `history` and autosuggestions still show the line, and under
+  the default policy nothing stops it (broker.md, Private mode). Start
+  commands typed in private mode with a space and set
+  `HISTCONTROL=ignorespace` (bash) or `setopt HIST_IGNORE_SPACE` (zsh,
+  then run one more command), and leave pagers and editors that showed
+  private text before turning private mode off.
 - `cursor_since` stops during private mode and jumps when it ends; the
   jump tells how many lines scrolled meanwhile (not what they held).
 - `sudo-rs` (the default `sudo` on Ubuntu 26.04) and `sudo` with
@@ -530,8 +560,9 @@ are in the PR that added them and in `tests/attacks/results/`.
   directories (`node_modules`, `vendor`) or below its depth limit: a
   `git init` there is not reported.
 - The level `cotty agent` reports does not lower for weakening flags: a
-  run with `--allow-abstract-sockets` on Landlock ABI below 6, or any
-  `unshare -U` program, still reads `confined`; `--quiet` hides the
+  run with `--allow-abstract-sockets` on Landlock ABI below 6 still reads
+  `confined` (a program that only made its own namespaces with `unshare
+  -U` is `weak` to the broker since review COT-2); `--quiet` hides the
   security notes (a replaceable link, scan limits, "the cotty binary is
   in a directory the agent can write").
 - Links inside a protected directory (`~/.claude/skills/x ->

@@ -114,10 +114,11 @@ knows it reached the session's broker (docs/protocol.md section 7).
 
 The resulting assurance is reported, like basalt-shell's modes: `strong`
 (guard loaded, the session's pts protection confirmed by the guard, and
-the agent tagged by it and under layer 2), `confined` (layer 2 active, no
-guard; or the guard without layer 2), `weak` (agent not started through
-`cotty agent`; the docs say what that means), `insecure` (development
-only).
+the agent tagged by it and under layer 2), `confined` (layer 2 active and
+built by the trusted cotty binary, no guard), `weak` (agent not started
+through `cotty agent`, including one under the guard without layer 2: a
+tag or namespaces a process can give itself raise nothing; the docs say
+what that means), `insecure` (development only).
 
 ## 4. Enforcement layers
 

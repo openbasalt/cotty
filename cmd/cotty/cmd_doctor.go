@@ -68,6 +68,8 @@ func sessionsSummary(layer2 string, checks []confine.Check) (string, string) {
 		return "unavailable (cotty agent cannot start here)", ""
 	case status["binary"] == "warn":
 		return "weak (the cotty binary can be replaced by your user)", "Sessions report weak until cotty is installed root-owned (see the binary line above)."
+	case status["landlock"] == "fail":
+		return "weak (no Landlock: agents cannot be confined here)", "Sessions report every agent weak on a kernel without Landlock (see the landlock line above)."
 	case guardRunning:
 		return "strong available for new sessions (cotty-guard running)",
 			"Sessions created before cotty-guard started stay at their level (confined); start a new session to get strong."

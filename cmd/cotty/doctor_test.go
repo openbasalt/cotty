@@ -21,6 +21,7 @@ func TestSessionsSummary(t *testing.T) {
 		{"guard not running", "confined", []confine.Check{check("binary", "ok"), check("guard", "info")}, "confined (cotty-guard not running)", "before cotty-guard starts stay confined"},
 		{"guard not answering", "confined", []confine.Check{check("binary", "ok"), check("guard", "warn")}, "confined (cotty-guard not answering)", ""},
 		{"untrusted binary", "confined", []confine.Check{check("binary", "warn"), check("guard", "ok")}, "weak", ""},
+		{"no landlock", "partial", []confine.Check{check("binary", "ok"), check("landlock", "fail"), check("guard", "ok")}, "weak (no Landlock", "every agent weak"},
 		{"no namespaces", "unavailable", []confine.Check{check("binary", "ok"), check("guard", "ok")}, "unavailable", ""},
 	} {
 		got, note := sessionsSummary(tc.layer2, tc.checks)

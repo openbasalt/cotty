@@ -55,6 +55,13 @@ type Classifier struct {
 	Guard       Guard
 	Insecure    bool
 	AgentDomain func(typ string) bool
+	// SeccompFilter: `cotty agent` installs its seccomp filter on this
+	// system (confine.SeccompSupported), so a confined agent shows one.
+	SeccompFilter bool
+	// LandlockABI is the kernel's Landlock ABI (confine.LandlockABI). At
+	// 0, cotty agent runs the agent without Landlock (only on
+	// --allow-no-landlock), which is not confined (review COT-4).
+	LandlockABI int
 }
 
 // Verdict is the result of classifying one peer.
@@ -203,21 +210,24 @@ func (c *Classifier) Classify(in Info) Verdict {
 }
 
 // agentAssurance tells how well an agent peer is kept away from what cotty
-// hides.
+// hides. Only a confinement the trusted cotty binary built counts
+// (verifyLaunch); a guard tag adds layer 3 on top of it but never raises
+// an agent on its own, since any process may ask the guard to tag itself
+// (review COT-2). Anything that cannot be verified is weak.
 func (c *Classifier) agentAssurance(in Info, tag string) (string, string) {
-	// Layer 2 shows as other namespaces (or no visible pid at all).
-	layer2 := in.PID <= 0 || (in.UserNS != "" && in.UserNS != c.SelfUserNS) || (in.PidNS != "" && in.PidNS != c.SelfPidNS)
+	why := c.verifyLaunch(in)
+	loaded := c.Guard != nil && c.Guard.Loaded()
 	switch {
-	case tag != "" && layer2 && c.Guard.Loaded():
+	case why == "" && tag != "" && loaded:
 		return proto.AssuranceStrong, ""
-	case tag != "" && c.Guard.Loaded():
-		// The guard alone keeps the session pts and the runtime directory
-		// away, not the person's files and other terminals (review N21).
-		return proto.AssuranceConfined, "agent tagged by the guard without layer 2 (cotty agent): the person's files and other terminals stay reachable"
-	case layer2 || IsAgentCgroup(in.Cgroup):
-		return proto.AssuranceConfined, "agent in its own namespaces or agent cgroup (layer 2), no guard"
+	case why == "" && loaded:
+		return proto.AssuranceConfined, "agent started by cotty agent but not tagged by the guard (started before the guard ran)"
+	case why == "":
+		return proto.AssuranceConfined, "agent started by cotty agent (layer 2), no guard"
+	case tag != "":
+		return proto.AssuranceWeak, "tagged by the guard but not confined by cotty agent (" + why + "): the person's files stay reachable"
 	}
-	return proto.AssuranceWeak, "agent not started through cotty agent"
+	return proto.AssuranceWeak, "agent not confined by cotty agent: " + why
 }
 
 func (c *Classifier) isOtherSessionTTY(nr uint64) bool {

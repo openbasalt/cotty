@@ -33,7 +33,14 @@ channels are opt-in.
   `cat ~/.config/x/token` prints a secret cotty does not know about.
 - Not a guard for secrets typed with echo on. `export TOKEN=...` is visible
   to the agent unless you turned on private mode first or the value is on
-  the masking list.
+  the masking list. Private mode hides the rows, not the shell's history:
+  once it is off, an agent can draw the command again (Up, `history`,
+  `!!`, a zsh autosuggestion) and read it. Under `--policy confirm` the
+  keys and characters that recall history are refused to agents in bash
+  and zsh; under the default policy nothing stops it. Start such a command
+  with a space and have the shell skip it (bash
+  `HISTCONTROL=ignorespace`, zsh `setopt HIST_IGNORE_SPACE`), or put the
+  value on the masking list.
 - Not a defence against a malicious kernel or root.
 - Not a network filter. A confined agent can reach any TCP or UDP service
   you can, including services on localhost.
@@ -63,11 +70,15 @@ weakest one in the status line:
 | Level | Meaning |
 | --- | --- |
 | `strong` | the guard is loaded and confirms the session pts protection, and the agent runs under `cotty agent` and is tagged by the guard |
-| `confined` | the agent runs under `cotty agent`, no guard (or the guard without `cotty agent`) |
-| `weak` | no confinement evidence: an agent CLI started without `cotty agent`, or any other program of yours |
+| `confined` | the agent runs under `cotty agent` (the broker checks that the agent's namespaces were built by the installed cotty binary), no guard |
+| `weak` | no confinement evidence: an agent CLI started without `cotty agent`, a program in namespaces it made itself or tagged by the guard on its own request, or any other program of yours |
 | `insecure` | broker started with `--dev-insecure` (development only) |
 
-What each level stops, case by case, is in docs/security.md.
+The level describes the agent's MCP server, the process that connects to
+the session. It keeps out agents that did not go through `cotty agent`;
+it is not proof against a program that already runs with all your rights,
+which can start a confined MCP server for itself. What each level stops,
+case by case, is in docs/security.md.
 
 ## Requirements
 
@@ -138,9 +149,10 @@ without `.git` (its hooks and config are then the agent's),
 `--allow-git-links` accepts a project whose `.git`, git config or hooks
 are symbolic links, and `--allow-abstract-sockets` starts on kernels
 below Landlock ABI 6 even though a display or session bus is reachable
-through abstract sockets there. `--show-hidden` leaves a profile's
-hidden directories visible (for Claude Code, `~/.claude/ide`, whose lock
-files hold your IDE's auth token).
+through abstract sockets there. `--allow-no-landlock` starts on a kernel
+without Landlock, where sessions then report the agent `weak`.
+`--show-hidden` leaves a profile's hidden directories visible (for Claude
+Code, `~/.claude/ide`, whose lock files hold your IDE's auth token).
 
 The lock does not light for a password prompt inside a program that
 relays the terminal in raw mode (`sudo -i`, `ssh`, `tmux`, `screen`):
