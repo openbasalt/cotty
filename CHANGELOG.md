@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Build: go.mod names Go 1.27.4 (CI builds with that line); the CI
+  actions are pinned by commit SHA, and Dependabot proposes Go module
+  and action updates weekly.
 - `cotty agent` refuses a kernel without Landlock (ABI 0) unless given
   `--allow-no-landlock`; it used to start the agent without Landlock and
   the session still reported it `confined`. Sessions now report every
