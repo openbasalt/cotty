@@ -1360,7 +1360,7 @@ func (b *Broker) agentType(c *conn, text string, enter bool, keys []string) (pro
 		}
 		if confirm && !confirmTextOK(text, b.shellUTF8) {
 			return deny(proto.Errorf(proto.ErrPolicyDenied, "under the confirm policy agent text may not hold tabs (completion runs programs), "+
-				"control characters, escape sequences, history expansion (! followed by anything but a blank, = or (, and ^) "+
+				"control characters, escape sequences, history expansion characters (! and ^; write != as -ne or a script file) "+
 				"or, outside a UTF-8 locale, bytes above 0x7f"))
 		}
 		seq = []byte(text)

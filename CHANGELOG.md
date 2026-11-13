@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Confirm policy: agent text may no longer hold any `!`. A `!` before a
+  blank, `=` or `(` was allowed, and the editing keys agents keep turned
+  it into a history reference afterwards (`echo ! `, Backspace, `-2`):
+  with Space bound to magic-space the shell drew the command before last,
+  one typed in private mode included, on the screen without an Enter.
+
 - Build: go.mod names Go 1.27.4 (CI builds with that line); the CI
   actions are pinned by commit SHA, and Dependabot proposes Go module
   and action updates weekly.

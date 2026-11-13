@@ -57,11 +57,14 @@ on its own:
   them C-p, C-r, M-. and M-< recall history, and C-x C-e, M-C-e
   (shell-expand-line) and C-o run or submit the line.
 - In text: tabs, control characters other than Enter, Backspace and C-c,
-  escape sequences, history expansion (`!` followed by anything but a
-  blank, `=` or `(`, and `^`), and, when the shell's locale is not UTF-8,
-  bytes above 0x7f. Space bound to magic-space (oh-my-zsh does that)
-  expands `!!` or `^old^new` on the screen without an Enter, and after an
-  Enter the expanded line, not the one you approved, would run. In a C or
+  escape sequences, the history expansion characters `!` and `^`, and,
+  when the shell's locale is not UTF-8, bytes above 0x7f. Space bound to
+  magic-space (oh-my-zsh does that) expands `!!` or `^old^new` on the
+  screen without an Enter, and after an Enter the expanded line, not the
+  one you approved, would run. Every `!` is refused, also where a shell
+  would not expand it (`!=`, `! cmd`): with Left, Backspace and more text
+  an agent turns `echo ! ` into `echo !-2`, which the next Space expands
+  (an agent writes `-ne`, `test -z` or a script file instead). In a C or
   POSIX locale readline reads bytes above 0x7f as Meta keys, and M-C-e
   runs the command substitutions of the line.
 

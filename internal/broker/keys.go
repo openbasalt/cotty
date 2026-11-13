@@ -101,7 +101,8 @@ var fKeys = map[string]string{
 //     line or runs anything.
 //   - Space inserts a blank. Where it is bound to magic-space (oh-my-zsh
 //     does that) it expands history references already on the line; the
-//     characters that start one are refused in text (confirmTextOK).
+//     characters that start one are refused in text (confirmTextOK), so
+//     no agent edit can leave one there.
 //   - C-c interrupts; it never runs anything.
 //
 // Refused, although they do not submit a line:
@@ -128,13 +129,15 @@ var confirmKeys = map[string]bool{
 //     control character and escape sequence (C-o, C-x C-e, Meta
 //     sequences), which could submit or edit a line in ways the person
 //     does not see coming;
-//   - history expansion: a '!' that starts a history reference in bash and
-//     zsh (any '!' not followed by a blank, '=' or '('; a '!' at the end
-//     of the text too, as the next text may complete it) and '^' (quick
-//     substitution, ^old^new): with Space bound to magic-space they draw
-//     earlier commands, private ones included, on the screen without an
-//     Enter, and after an Enter the line that runs is not the line the
-//     person approved;
+//   - history expansion: every '!' (bash and zsh history references) and
+//     '^' (quick substitution, ^old^new): with Space bound to magic-space
+//     they draw earlier commands, private ones included, on the screen
+//     without an Enter, and after an Enter the line that runs is not the
+//     line the person approved. A '!' the shells would not expand where
+//     it stands (before a blank, '=' or '(') is refused too: the editing
+//     keys an agent keeps turn it into a reference afterwards ("echo ! ",
+//     Backspace, "-2", Space expands the command before last), and the
+//     broker cannot tell what the line holds once it was edited;
 //   - bytes with the eighth bit set unless the shell's locale is UTF-8
 //     (utf8): with readline's convert-meta, on by default in 8-bit
 //     locales such as C or POSIX, each such byte is a Meta key, and
@@ -146,17 +149,8 @@ func confirmTextOK(s string, utf8 bool) bool {
 		case c == '\r' || c == '\n' || c == 0x7f || c == 0x08 || c == 0x03:
 		case c < 0x20:
 			return false
-		case c == '^':
+		case c == '^' || c == '!':
 			return false
-		case c == '!':
-			if i+1 == len(s) {
-				return false
-			}
-			switch s[i+1] {
-			case ' ', '\t', '\r', '\n', '=', '(':
-			default:
-				return false
-			}
 		case c >= 0x80 && !utf8:
 			return false
 		}
