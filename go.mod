@@ -4,7 +4,7 @@ go 1.27.4
 
 require (
 	github.com/charmbracelet/ultraviolet v0.0.0-20260303162955-0b88c25f3fff
-	github.com/charmbracelet/x/ansi v0.11.9
+	github.com/charmbracelet/x/ansi v0.11.10
 	github.com/charmbracelet/x/vt v0.1.0
 	github.com/cilium/ebpf v0.22.0
 	github.com/creack/pty v1.1.24
